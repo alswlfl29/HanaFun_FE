@@ -17,7 +17,7 @@ export const PasswordKeypad: FC<IProps> = ({
     handleChangePw(num);
   };
   return (
-    <div className='absolute bottom-0 grid grid-cols-4 grid-rows-4 text-white w-full h-60'>
+    <div className='bottom-0 grid grid-cols-4 grid-rows-4 text-white w-full h-60'>
       {[1, -1, 2, -1, 3, 4, 5, 6, 7, 8, 9, 0].map((num, index) => (
         <button
           key={index}

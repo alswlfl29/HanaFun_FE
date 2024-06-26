@@ -50,11 +50,14 @@ export const Login = () => {
           ></div>
         ))}
       </div>
-      <PasswordKeypad
-        isLogin={false}
-        handleChangePw={onChangePassword}
-        handleCancle={canclePassword}
-      />
+      <div className='w-full absolute bottom-0 left-0 pb-16'>
+        <PasswordKeypad
+          isLogin={false}
+          handleChangePw={onChangePassword}
+          handleCancle={canclePassword}
+        />
+      </div>
+
     </div>
   );
 };

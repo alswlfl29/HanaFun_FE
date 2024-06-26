@@ -38,7 +38,7 @@ export const Navbar = () => {
   return (
     <>
       <Outlet />
-      <div className='fixed max-w-[390px] bottom-0 bg-white w-full px-10 pt-4 pb-5 flex justify-between items-center rounded-t-[30px]'>
+      <div className='fixed max-w-[390px] bottom-0 bg-white w-full px-10 py-4 flex justify-between items-center rounded-t-[30px] drop-shadow-[0px_-1px_10px_rgba(0,0,0,0.25)]'>
         {navbarItems.map((item) => (
           <Link
             to={item.location}
