@@ -32,7 +32,7 @@ const MyPage = () => {
       <div className='flex justify-between mt-5'>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'
-          onClick={() => navigate('')}
+          onClick={() => navigate('/lessonCalendar')}
         >
           <p className='font-hanaMedium text-base mt-6 ml-5'>
             신청 클래스 일정
