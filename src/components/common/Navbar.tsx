@@ -25,7 +25,7 @@ const navbarItems = [
   },
   {
     id: 4,
-    location: '/3',
+    location: '/mypage',
     inActive_icons: 'images/navbar/inactive_mypage.svg',
     active_icons: 'images/navbar/active_mypage.svg',
     name: '마이페이지',
