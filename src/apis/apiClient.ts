@@ -12,6 +12,29 @@ export class ApiClient {
     this.axiosInstance = this.createAxiosInstance();
   }
 
+  // ------- mypage -------
+
+  // get lessonDetail
+
+  // public async getLessonDetails(): Promise<
+  //   ApiResponseType<LessonDetailType[]>
+  // > {
+  //   const response = await this.axiosInstance.request<
+  //     ApiResponseType<LessonDetailType[]>
+  //   >({
+  //     method: 'get',
+  //     url: '/lessonDetail.json',
+  //   });
+  //   return response.data;
+  // }
+
+  public static async getMyLesson(): Promise<MyLessonType> {
+    const apiUrl = '/data/myLesson.json';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data;
+  }
+
   //---------users---------
   // async postLogin(user: LoginReqType) {
   //   const response = await this.axiosInstance.request<LoginType>({

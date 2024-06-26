@@ -1,0 +1,59 @@
+{
+  "lessonDetail": [
+    {
+      "lesson_id": 1,
+      "image": "../images/mypage/sample_lessoncard",
+      "title": "한강 카약",
+      "price": 50000,
+      "description": "클래스 소개 1",
+      "location": "서울특별시 자양역",
+      "materials": "즐거운 마음, 자신감",
+      "capacity": 10,
+      "category_name": "스포츠"
+    },
+    {
+      "lesson_id": 2,
+      "image": "../images/mypage/sample_lessoncard",
+      "title": "베이킹",
+      "price": 50000,
+      "description": "클래스 소개 2",
+      "location": "서울특별시 성동구",
+      "materials": "즐거운 마음, 자신감",
+      "capacity": 4,
+      "category_name": "베이킹"
+    },
+    {
+      "lesson_id": 3,
+      "image": "../images/mypage/sample_lessoncard",
+      "title": "향수 제작",
+      "price": 50000,
+      "description": "클래스 소개 3",
+      "location": "서울특별시 동대문구",
+      "materials": "즐거운 마음, 자신감",
+      "capacity": 5,
+      "category_name": "뷰티"
+    },
+    {
+      "lesson_id": 4,
+      "image": "../images/mypage/sample_lessoncard",
+      "title": "가방 제작",
+      "price": 50000,
+      "description": "클래스 소개 4",
+      "location": "서울특별시 동대문구",
+      "materials": "즐거운 마음, 자신감",
+      "capacity": 7,
+      "category_name": "소품"
+    },
+    {
+      "lesson_id": 5,
+      "image": "images/mypage/sample_lessoncard",
+      "title": "컴퓨터 조립",
+      "price": 50000,
+      "description": "클래스 소개 5",
+      "location": "서울특별시 동대문구 알파코",
+      "materials": "즐거운 마음, 자신감",
+      "capacity": 3,
+      "category_name": "자기계발"
+    }
+  ]
+}

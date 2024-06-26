@@ -7,6 +7,7 @@ import { Home } from './pages/main/Home.tsx';
 import { ModalProvider } from './context/ModalContext.tsx';
 import Modal from './components/common/Modal.tsx';
 import { Navbar } from './components/common/Navbar.tsx';
+import { MyPage } from './pages/mypage/MyPage.tsx';
 import { HanaMain } from './pages/main/HanaMain.tsx';
 import { Login } from './pages/auth/Login.tsx';
 
@@ -20,7 +21,10 @@ const router = createBrowserRouter([
       { path: '/login', element: <Login /> },
       {
         element: <Navbar />,
-        children: [{ path: '/', element: <Home /> }],
+        children: [
+          { path: '/', element: <Home /> },
+          { path: '/mypage', element: <MyPage /> },
+        ],
       },
     ],
   },
