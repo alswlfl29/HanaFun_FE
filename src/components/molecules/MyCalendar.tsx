@@ -5,8 +5,8 @@ import '../css/MyCalendar.css';
 import moment from 'moment';
 
 interface IProps {
-  data: LessonType[] | undefined;
-  setSelectedLesson: (lesson: LessonType[]) => void;
+  data: CalendarDataType[] | undefined;
+  setSelectedLesson: (lesson: CalendarDataType[]) => void;
 }
 
 export const MyCalendar = ({ data, setSelectedLesson }: IProps) => {

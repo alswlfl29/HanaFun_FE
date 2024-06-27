@@ -1,0 +1,27 @@
+[
+  {
+    "lesson_id": 1,
+    "image": "/images/mypage/sample_lessoncard.png",
+    "title": "클래스 1"
+  },
+  {
+    "lesson_id": 2,
+    "image": "/images/mypage/sample_lessoncard.png",
+    "title": "클래스 2"
+  },
+  {
+    "lesson_id": 3,
+    "image": "/images/mypage/sample_lessoncard.png",
+    "title": "클래스 3"
+  },
+  {
+    "lesson_id": 4,
+    "image": "/images/mypage/sample_lessoncard.png",
+    "title": "클래스 4"
+  },
+  {
+    "lesson_id": 5,
+    "image": "/images/mypage/sample_lessoncard.png",
+    "title": "클래스 5"
+  }
+]

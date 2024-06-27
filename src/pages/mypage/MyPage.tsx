@@ -45,7 +45,7 @@ const MyPage = () => {
         </div>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'
-          onClick={() => navigate('')}
+          onClick={() => navigate('/host')}
         >
           <img
             src='../images/mypage/pencil.png'

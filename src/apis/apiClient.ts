@@ -38,7 +38,7 @@ export class ApiClient {
 
   // 임의 데이터. 신청 클래스 목록 페이지 호출
   public static async getMyLessonAll(): Promise<LessonType[]> {
-    const apiUrl = '/data/myLesson_all.json';
+    const apiUrl = '/data/myLessonAll.json';
     const response = await fetch(apiUrl);
     const data = await response.json();
     return data;
@@ -55,6 +55,22 @@ export class ApiClient {
       (lesson: LessonDetailType) => lesson.lesson_id === lesson_id
     );
     return lesssonDetail;
+  }
+
+  // 임의 데이터. 개설 클래스 목록 호출
+  public static async getHostLesson(): Promise<HostLessonInfoType[]> {
+    const apiUrl = '/data/hostLesson.json';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data;
+  }
+
+  // 임의 데이터. 개설 클래스 상세정보 호출
+  public static async getHostLessonDetail(): Promise<HostLessonDetailType[]> {
+    const apiUrl = '/data/hostLessonDetail.json';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data;
   }
 
   //---------users---------
