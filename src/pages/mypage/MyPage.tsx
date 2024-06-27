@@ -11,7 +11,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/myLessonList');
+    navigate('/my-lesson-list');
   };
 
   // data 가져오기
@@ -32,7 +32,7 @@ const MyPage = () => {
       <div className='flex justify-between mt-5'>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'
-          onClick={() => navigate('/lessonCalendar')}
+          onClick={() => navigate('/lesson-calendar')}
         >
           <p className='font-hanaMedium text-base mt-6 ml-5'>
             신청 클래스 일정
@@ -65,7 +65,7 @@ const MyPage = () => {
         />
       </div>
       {lessons && lessons.length > 0 ? (
-        <LessonSlider data={lessons} />
+        <LessonSlider data={lessons} show={false} option='single' />
       ) : (
         <NotFindMyLesson />
       )}

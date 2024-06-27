@@ -37,7 +37,7 @@ export class ApiClient {
   }
 
   // 임의 데이터. 신청 클래스 목록 페이지 호출
-  public static async getMyLessonAll(): Promise<LessonType> {
+  public static async getMyLessonAll(): Promise<LessonType[]> {
     const apiUrl = '/data/myLesson_all.json';
     const response = await fetch(apiUrl);
     const data = await response.json();
