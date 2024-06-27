@@ -12,7 +12,7 @@ import { AccountPwKeypad } from '../../components/organisms/AccountPwKeypad';
 import { Slide } from '../../components/organisms/Slide';
 import { QR } from '../../components/molecules/QR';
 
-const userDummyData = {
+export const userDummyData = {
   userId: 1,
   name: '오감자',
   accounts: [

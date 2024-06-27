@@ -18,7 +18,7 @@ const navbarItems = [
   },
   {
     id: 3,
-    location: '/2',
+    location: '/open-lesson',
     inActive_icons: 'images/navbar/inactive_add.svg',
     active_icons: 'images/navbar/active_add.svg',
     name: '클래스개설',
@@ -47,15 +47,19 @@ export const Navbar = () => {
           >
             <img
               src={
-                location.pathname === item.location
-                  ? item.active_icons
-                  : item.inActive_icons
+                item.id !== 1
+                  ? location.pathname.includes(item.location)
+                    ? item.active_icons
+                    : item.inActive_icons
+                  : location.pathname === item.location
+                    ? item.active_icons
+                    : item.inActive_icons
               }
               alt={item.name}
               className='mb-1'
             />
             <span
-              className={`text-sm font-hanaMedium mt-1 ${location.pathname === item.location ? 'text-hanaNavGreen' : 'text-hanaNavGray'}`}
+              className={`text-sm font-hanaMedium mt-1 ${item.id !== 1 ? (location.pathname.includes(item.location) ? 'text-hanaNavGreen' : 'text-hanaNavGray') : location.pathname === item.location ? 'text-hanaNavGreen' : 'text-hanaNavGray'}`}
             >
               {item.name}
             </span>
