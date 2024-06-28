@@ -53,7 +53,7 @@ export const LessonCalendar = () => {
       <MyCalendar
         data={calendarData || []}
         setSelectedLesson={(lessons: CalendarDataType[]) => {
-          const selectedLessons = allLessons.filter((lesson: LessonType) =>
+          const selectedLessons = allLessons?.filter((lesson: LessonType) =>
             lessons.some(
               (selectedLesson) => selectedLesson.lesson_id === lesson.lesson_id
             )
