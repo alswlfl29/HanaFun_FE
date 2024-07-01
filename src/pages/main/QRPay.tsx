@@ -140,7 +140,7 @@ export const QRPay = () => {
       <Topbar title='QR결제' onClick={() => navigate('/')} />
       {!isSend ? (
         <>
-          <div className='pt-5 px-5 mb-11'>
+          <div className='pt-5 mb-11'>
             <ChoiceAccount
               accounts={[userDummyData.accounts[0]]}
               selectedAccount={selectedAccount}

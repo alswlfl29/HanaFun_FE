@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { PasswordKeypad } from '../../components/molecules/PasswordKeypad';
+import { useNavigate } from 'react-router-dom';
 
 type PasswordType = {
   [number: number]: number;
 };
 
 export const Login = () => {
+  const navigate = useNavigate();
   const [password, setPassword] = useState<PasswordType>({
     1: -1,
     2: -1,
@@ -33,6 +35,7 @@ export const Login = () => {
     [1, 2, 3, 4, 5, 6].map((num) => (resultPw += password[num]));
     console.log('비밀번호>>', resultPw);
     console.log('로그인');
+    navigate('/');
   };
 
   useEffect(() => {
@@ -57,7 +60,6 @@ export const Login = () => {
           handleCancle={canclePassword}
         />
       </div>
-
     </div>
   );
 };

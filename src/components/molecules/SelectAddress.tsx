@@ -24,6 +24,7 @@ export const SelectAddress: FC<IProps> = ({ onChangeAddress }) => {
     width: '360px',
     height: '480px',
     marginTop: '25px',
+    zIndex: '60px',
   };
 
   const handleOpenAddressPopup = () => {

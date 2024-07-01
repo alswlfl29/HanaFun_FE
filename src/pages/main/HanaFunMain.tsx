@@ -13,6 +13,7 @@ import { Slide } from '../../components/organisms/Slide';
 import { QR } from '../../components/molecules/QR';
 import { AccountType } from '../../components/organisms/ChoiceAccount';
 import { RiQrScan2Line } from 'react-icons/ri';
+import { Lessondata } from '../search/LessonSearch';
 
 export const userDummyData = {
   userId: 1,
@@ -38,29 +39,6 @@ export const userDummyData = {
     },
   ],
 };
-
-const bestLessonDummyData = [
-  {
-    image: 'https://picsum.photos/200/200',
-    title: '나만의 반려식물, 테라리움 만들기1',
-  },
-  {
-    image: 'https://picsum.photos/200/200',
-    title: '나만의 반려식물, 테라리움 만들기2',
-  },
-  {
-    image: 'https://picsum.photos/200/200',
-    title: '나만의 반려식물, 테라리움 만들기3',
-  },
-  {
-    image: 'https://picsum.photos/200/200',
-    title: '나만의 반려식물, 테라리움 만들기4',
-  },
-  {
-    image: 'https://picsum.photos/200/200',
-    title: '나만의 반려식물, 테라리움 만들기5',
-  },
-];
 
 const accountSliderSettings = {
   className: 'center',
@@ -226,9 +204,10 @@ export const HanaFunMain = () => {
         <div className='mt-8'>
           <h1 className='font-hanaBold text-xl mb-1.5'>인기클래스</h1>
           <div className='flex gap-2.5 overflow-x-auto scroll'>
-            {bestLessonDummyData.map((item, index) => (
+            {Lessondata.map((item, index) => (
               <PopularLessonItem
                 key={index}
+                id={item.lesson_id}
                 img={item.image}
                 title={item.title}
               />

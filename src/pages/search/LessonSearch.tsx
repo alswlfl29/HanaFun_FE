@@ -7,34 +7,34 @@ import { IoIosSearch } from 'react-icons/io';
 import { TbArrowsSort } from 'react-icons/tb';
 import { LessonSearchCard } from '../../components/molecules/LessonSearchCard';
 
-const data = [
+export const Lessondata = [
   {
     lesson_id: 5,
     image: 'https://picsum.photos/200/200',
-    title: 'fdafasdffdafasdffdafasdffdafasdf',
+    title: '맛있는 치즈케이크 만들기',
     price: 60000,
     host_name: '김헨리',
   },
   {
     lesson_id: 6,
     image: 'https://picsum.photos/200/200',
-    title: 'dccccvdfac',
+    title: '수제 캔들 만들기',
     price: 30000,
     host_name: '김하나',
   },
   {
     lesson_id: 7,
     image: 'https://picsum.photos/200/200',
-    title: 'dccc',
+    title: '클라이밍 배우기',
     price: 30000,
-    host_name: '김하나',
+    host_name: '홍길동',
   },
   {
     lesson_id: 8,
     image: 'https://picsum.photos/200/200',
-    title: 'sfaa',
+    title: '재미있는 재테크',
     price: 30000,
-    host_name: '김하나',
+    host_name: '별돌이',
   },
 ];
 
@@ -88,7 +88,7 @@ export const LessonSearch = () => {
         />
       </div>
       <div className='flex justify-between px-5 mt-5 font-hanaMedium text-base'>
-        <p>검색결과 {data.length}건</p>
+        <p>검색결과 {Lessondata.length}건</p>
         <button
           className='relative flex items-center text-hanaSilver'
           onClick={() => setShowSortBtn((prev) => !prev)}
@@ -114,7 +114,7 @@ export const LessonSearch = () => {
       </div>
       <hr className='mx-5 mt-2 border-hanaSilver' />
       <div className='px-5 py-4 flex flex-col gap-4'>
-        {data.map((data) => (
+        {Lessondata.map((data) => (
           <LessonSearchCard key={data.lesson_id} lesson={data} />
         ))}
       </div>
