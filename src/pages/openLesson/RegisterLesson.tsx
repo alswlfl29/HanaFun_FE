@@ -11,7 +11,7 @@ import { AddLessonInput } from '../../components/molecules/AddLessonInput';
 import { AddLessonMaterialList } from '../../components/molecules/AddLessonMaterialList';
 import { AddLessonTimeList } from '../../components/molecules/AddLessonTimeList';
 
-const categories = [
+export const categories = [
   '요리',
   '여행',
   '스포츠',
