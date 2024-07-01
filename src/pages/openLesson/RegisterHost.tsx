@@ -2,23 +2,26 @@ import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../../components/common/Topbar';
 import { Button } from '../../components/common/Button';
 import { userDummyData } from '../main/HanaFunMain';
-import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
+import {
+  AccountType,
+  ChoiceAccount,
+} from '../../components/organisms/ChoiceAccount';
 import { useRef, useState } from 'react';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
 
 export const RegisterHost = () => {
   const navigate = useNavigate();
   const [isSend, setIsSend] = useState<boolean>(false);
-  const [accountId, setAccountId] = useState<number>(-1);
+  const [account, setAccount] = useState<AccountType | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const selectedAccountId = (idNumber: number) => {
-    setAccountId(idNumber);
+  const selectedAccountId = (account: AccountType) => {
+    setAccount(account);
   };
 
   const handleRegisterHost = () => {
-    if (accountId !== -1 && inputRef.current) {
-      console.log(accountId + ' ' + inputRef.current.value);
+    if (account && inputRef.current) {
+      console.log(account.accountId + ' ' + inputRef.current.value);
       setIsSend(true);
     }
   };
@@ -36,7 +39,8 @@ export const RegisterHost = () => {
             <h2 className='font-hanaBold text-xl mb-2'>입금계좌</h2>
             <ChoiceAccount
               accounts={userDummyData.accounts}
-              selectedAccountId={selectedAccountId}
+              selectedAccount={selectedAccountId}
+              isSelectBtn={true}
             />
           </div>
           <div className='mt-5'>

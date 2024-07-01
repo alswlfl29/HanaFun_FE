@@ -11,6 +11,7 @@ import { PopularLessonItem } from '../../components/molecules/PopularLessonItem'
 import { AccountPwKeypad } from '../../components/organisms/AccountPwKeypad';
 import { Slide } from '../../components/organisms/Slide';
 import { QR } from '../../components/molecules/QR';
+import { AccountType } from '../../components/organisms/ChoiceAccount';
 
 export const userDummyData = {
   userId: 1,
@@ -65,25 +66,28 @@ export const HanaFunMain = () => {
   const [showKeypad, setShowKeypad] = useState<boolean>(false);
   const [showQr, setShowQr] = useState<boolean>(false);
 
-  const [selectedAccount, setSelectedAccount] = useState<{
-    accountId: number;
-    accountNumber: string;
-  }>({
+  const [selectedAccount, setSelectedAccount] = useState<AccountType>({
     accountId: -1,
+    accountName: '',
     accountNumber: '',
+    balance: 0,
   });
 
   const sendAccountPassword = (password: string) => {
     console.log('비밀번호>>', password);
     console.log('로그인');
+    setShowKeypad(false);
+    setShowDropdown(false);
     setShowQr(true);
   };
 
-  const clickedAccount = (accountId: number, accountNumber: string) => {
+  const clickedAccount = (account: AccountType) => {
     setShowDropdown((showDropdown) => !showDropdown);
     setSelectedAccount({
-      accountId,
-      accountNumber,
+      accountId: account.accountId,
+      accountNumber: account.accountNumber,
+      accountName: account.accountName,
+      balance: account.balance,
     });
   };
 
@@ -103,6 +107,7 @@ export const HanaFunMain = () => {
           userId={userDummyData.userId}
           accountId={selectedAccount.accountId}
           accountNumber={selectedAccount.accountNumber}
+          balance={selectedAccount.balance}
           onClose={() => setShowQr(false)}
         />
       )}
@@ -134,9 +139,7 @@ export const HanaFunMain = () => {
                     color='#B5B5B5'
                     size={16}
                     className='rotate-90 cursor-pointer'
-                    onClick={() =>
-                      clickedAccount(account.accountId, account.accountNumber)
-                    }
+                    onClick={() => clickedAccount(account)}
                   />
                   {showDropdown && (
                     <div className='absolute right-0 mr-11'>

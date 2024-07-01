@@ -7,6 +7,7 @@ interface IProps {
   userId: number;
   accountId: number;
   accountNumber: string;
+  balance: number;
   onClose: () => void;
 }
 
@@ -14,9 +15,10 @@ export const QR: FC<IProps> = ({
   userId,
   accountId,
   accountNumber,
+  balance,
   onClose,
 }) => {
-  console.log(userId, accountId, accountNumber);
+  console.log(userId, accountId, accountNumber, balance);
   const [isScan, setIsScan] = useState(false);
 
   return (
@@ -45,6 +47,7 @@ export const QR: FC<IProps> = ({
               userId,
               accountId,
               accountNumber,
+              balance,
             })}
             size={220}
           />

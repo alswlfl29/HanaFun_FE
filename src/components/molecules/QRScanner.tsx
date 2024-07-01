@@ -11,6 +11,7 @@ export type qrUserInfo = {
   userId: number;
   accountId: number;
   accountNumber: string;
+  balance: number;
 };
 
 export const QRScanner: FC<IProps> = ({ onClose }) => {
@@ -34,6 +35,7 @@ export const QRScanner: FC<IProps> = ({ onClose }) => {
         userId: parsedData.userId,
         accountId: parsedData.accountId,
         accountNumber: parsedData.accountNumber,
+        balance: parsedData.balance,
       },
     });
   };

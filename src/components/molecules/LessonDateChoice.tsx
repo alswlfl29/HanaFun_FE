@@ -3,7 +3,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { LuMinus, LuPlus } from 'react-icons/lu';
 import { formatDate } from '../../utils/formatDate';
 import { Button } from '../common/Button';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 interface IProps {
   dateList: DateListType[];
@@ -18,6 +18,7 @@ type DateListType = {
   quantityLeft: number;
 };
 export const LessonDateChoice: FC<IProps> = ({ dateList, price }) => {
+  const { lessonId } = useParams();
   const navigate = useNavigate();
   const [choiceDate, setChoiceDate] = useState<{
     lessondate_id: number;
@@ -116,7 +117,7 @@ export const LessonDateChoice: FC<IProps> = ({ dateList, price }) => {
                 {count}
               </p>
               <button
-                className={`rounded-r border border-hanaSilver py-1.5 px-1.5 bg-white ${count >= choiceDate.quantityLeft ? 'bg-[#EEEEEC]' : 'bg-white'}`}
+                className={`rounded-r border border-hanaSilver py-1.5 px-1.5 ${count === choiceDate.quantityLeft ? 'bg-[#EEEEEC]' : 'bg-white'}`}
                 onClick={plusCount}
               >
                 <LuPlus size={18} />
@@ -135,7 +136,16 @@ export const LessonDateChoice: FC<IProps> = ({ dateList, price }) => {
       <Button
         message='신청하기'
         isActive={activeBtn}
-        onClick={() => navigate('/pay')}
+        onClick={() =>
+          navigate('/pay', {
+            state: {
+              payment: count * price,
+              lessonId: lessonId,
+              lessondate_id: choiceDate?.lessondate_id || 0,
+              count: count,
+            },
+          })
+        }
       />
     </>
   );

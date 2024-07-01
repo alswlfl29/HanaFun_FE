@@ -40,14 +40,13 @@ export const AccountPwKeypad: FC<IProps> = ({
       let resultPw: string = '';
       [1, 2, 3, 4].map((num) => (resultPw += password[num]));
       handleClickedPassword(resultPw);
-      onClose();
     }
   }, [password]);
 
   return (
     <ModalBottomContainer onClose={onClose} color='#373A4D'>
-      <h3 className='flex text-white font-hanaRegular text-base'>
-        간편비밀번호 입력
+      <h3 className='flex text-white font-hanaRegular text-base mb-2'>
+        계좌비밀번호
       </h3>
       <div className='flex justify-center items-center gap-5'>
         {[1, 2, 3, 4].map((num: number, index) => (

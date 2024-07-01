@@ -3,13 +3,14 @@ import { Topbar } from '../../components/common/Topbar';
 import { Button } from '../../components/common/Button';
 import { ChangeEvent, useRef, useState } from 'react';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
-import { FaAngleDown, FaCamera } from 'react-icons/fa';
+import { FaCamera } from 'react-icons/fa';
 import { SelectAddress } from '../../components/molecules/SelectAddress';
 import { ModalBottomContainer } from '../../components/organisms/ModalBottomContainer';
 import { AddLessonInputLabel } from '../../components/Atom/AddLessonInputLabel';
 import { AddLessonInput } from '../../components/molecules/AddLessonInput';
 import { AddLessonMaterialList } from '../../components/molecules/AddLessonMaterialList';
 import { AddLessonTimeList } from '../../components/molecules/AddLessonTimeList';
+import { ChoiceInput } from '../../components/molecules/ChoiceInput';
 
 export const categories = [
   '요리',
@@ -176,13 +177,11 @@ export const RegisterLesson = () => {
             <h1 className='font-hanaBold text-lg flex items-end mb-1'>
               카테고리
             </h1>
-            <div
-              className={`flex items-center justify-between w-full bg-white rounded border-[0.7px] border-hanaSilver text-xs p-2 cursor-pointer ${category !== '' ? 'text-black' : 'text-hanaSilver'}`}
-              onClick={() => setShowModal(true)}
-            >
-              {category !== '' ? category : '카테고리를 선택해주세요'}
-              <FaAngleDown size={16} />
-            </div>
+            <ChoiceInput
+              isChoice={category !== ''}
+              content={category !== '' ? category : '카테고리를 선택해주세요'}
+              openModal={() => setShowModal(true)}
+            />
           </div>
           <AddLessonInput
             type='number'

@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       { path: '/qr-pay', element: <QRPay /> },
       { path: '/open-lesson/host', element: <RegisterHost /> },
       { path: '/open-lesson/lesson', element: <RegisterLesson /> },
-      { path: '/lesson/:id', element: <LessonDetail /> },
+      { path: '/lesson/:lessonId', element: <LessonDetail /> },
       { path: '/pay', element: <PayLesson /> },
       {
         element: <Navbar />,

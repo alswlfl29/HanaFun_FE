@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
-import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { MdKeyboardArrowDown } from 'react-icons/md';
 import { ModalBottomContainer } from './ModalBottomContainer';
 
-type accountType = {
+export type AccountType = {
   accountId: number;
   accountName: string;
   accountNumber: string;
@@ -10,12 +10,17 @@ type accountType = {
 };
 
 interface IProps {
-  accounts: accountType[];
-  selectedAccountId: (idNumber: number) => void;
+  accounts: AccountType[];
+  selectedAccount: (accountInfo: AccountType) => void;
+  isSelectBtn: boolean;
 }
 
-export const ChoiceAccount: FC<IProps> = ({ accounts, selectedAccountId }) => {
-  const [selectedAccount, setSelectedAccount] = useState<accountType>({
+export const ChoiceAccount: FC<IProps> = ({
+  accounts,
+  selectedAccount,
+  isSelectBtn,
+}) => {
+  const [selectedAccountInfo, setSelectedAccountInfo] = useState<AccountType>({
     accountId: accounts[0].accountId,
     accountName: accounts[0].accountName,
     accountNumber: accounts[0].accountNumber,
@@ -23,19 +28,19 @@ export const ChoiceAccount: FC<IProps> = ({ accounts, selectedAccountId }) => {
   });
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const handleChangedAccount = (account: accountType) => {
-    setSelectedAccount(account);
-    selectedAccountId(account.accountId);
+  const handleChangedAccount = (account: AccountType) => {
+    setSelectedAccountInfo(account);
+    selectedAccount(account);
     setShowModal(false);
   };
 
   useEffect(() => {
-    selectedAccountId(accounts[0].accountId);
+    selectedAccount(accounts[0]);
   }, []);
 
   return (
     <>
-      {showModal && (
+      {isSelectBtn && showModal && (
         <ModalBottomContainer
           color='#FFFFFF'
           onClose={() => setShowModal(false)}
@@ -68,31 +73,25 @@ export const ChoiceAccount: FC<IProps> = ({ accounts, selectedAccountId }) => {
         </ModalBottomContainer>
       )}
       <div
-        key={selectedAccount.accountId}
-        className='flex justify-between items-center bg-[#F1F1F1] rounded-md px-4 py-2'
+        className='flex justify-between items-center bg-[#F1F1F1] rounded-md px-4 py-3'
         onClick={() => setShowModal(true)}
       >
         <div className='flex flex-col items-start'>
           <p className='flex items-center justify-center gap-1 font-hanaMedium text-base text-black'>
             <img src='/images/hana_logo.svg' alt='hana_logo' className='w-5' />
-            {selectedAccount.accountName + '\n'}
+            {selectedAccountInfo.accountName + '\n'}
           </p>
           <p className='ml-6 font-hanaRegular text-[0.75rem] text-hanaSilver'>
-            하나 {selectedAccount.accountNumber}
+            하나 {selectedAccountInfo.accountNumber}
           </p>
         </div>
         <div className='flex flex-col items-end gap-1'>
-          {showModal ? (
-            <MdKeyboardArrowUp
-              size={24}
-              className='cursor-pointer mt-1.5'
-              onClick={() => setShowModal(false)}
-            />
-          ) : (
-            <MdKeyboardArrowDown size={24} className='cursor-pointer mt-1.5' />
-          )}
-          <p className='font-hanaMedium text-sm'>
-            {selectedAccount.balance.toLocaleString()}원
+          <MdKeyboardArrowDown
+            size={24}
+            className={`cursor-pointer ${!isSelectBtn && 'hidden'}`}
+          />
+          <p className={`font-hanaMedium text-sm ${!isSelectBtn && 'mt-5'}`}>
+            {selectedAccountInfo.balance.toLocaleString()}원
           </p>
         </div>
       </div>
