@@ -8,6 +8,10 @@ jobs:
     container: pandoc/latex
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
       - name: Install mustache (to update the date)
         run: apk add ruby && gem install mustache
       - name: creates output
