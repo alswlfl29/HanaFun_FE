@@ -7,6 +7,10 @@ interface Iprops {
   year: number;
 }
 
+const formatNumber = (value: number) => {
+  return new Intl.NumberFormat('ko-KR').format(value);
+};
+
 export const LessonSalesTotal = ({
   lesson_id,
   title,
@@ -22,7 +26,7 @@ export const LessonSalesTotal = ({
       }
     >
       <p>{title}</p>
-      <p>{lessonTotal} 원</p>
+      <p>{formatNumber(lessonTotal)} 원</p>
     </div>
   );
 };

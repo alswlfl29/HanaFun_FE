@@ -4,6 +4,10 @@ import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import Keypad from '../common/Keypad';
 import { EditPrice } from './EditPrice';
 
+const formatNumber = (value: number) => {
+  return new Intl.NumberFormat('ko-KR').format(value);
+};
+
 export const Calculator = () => {
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(6);
@@ -64,7 +68,7 @@ export const Calculator = () => {
 
       <div className='flex justify-between mt-10 text-xl'>
         <p>매출액</p>
-        <p>{totalSales}원</p>
+        <p>{formatNumber(totalSales)}원</p>
       </div>
 
       <div className='flex justify-between mt-4 text-xl'>
@@ -75,26 +79,28 @@ export const Calculator = () => {
             onClick={openEditPrice}
           />
         </div>
-        <p>{totalPrice}원</p>
+        <p>{formatNumber(totalPrice)}원</p>
       </div>
 
       <div className='text-[12px] text-hanaSilver mt-3'>
         <div className='flex justify-between'>
           <p>재료비</p>
-          <p>{materialPrice}원</p>
+          <p>{formatNumber(materialPrice)}원</p>
         </div>
         <div className='flex justify-between mt-2'>
           <p>장소대여비</p>
-          <p>{rentalPrice}원</p>
+          <p>{formatNumber(rentalPrice)}원</p>
         </div>
         <div className='flex justify-between mt-2'>
           <p>기타비용</p>
-          <p>{etcPrice}원</p>
+          <p>{formatNumber(etcPrice)}원</p>
         </div>
       </div>
       <div className='mt-5 pt-4 text-xl flex justify-between border-t-[1px] border-hanaSilver'>
         <p>순수익</p>
-        <p className='font-hanaMedium text-hanaGreen'>{netProfit}원</p>
+        <p className='font-hanaMedium text-hanaGreen'>
+          {formatNumber(netProfit)}원
+        </p>
       </div>
       {editPriceVisible && (
         <EditPrice

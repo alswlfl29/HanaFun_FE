@@ -14,6 +14,10 @@ const MyPage = () => {
     navigate('/mypage/my-lesson-list');
   };
 
+  const formatNumber = (value: number) => {
+    return new Intl.NumberFormat('ko-KR').format(value);
+  };
+
   // data 가져오기
   const { data: myLessons } = useQuery({
     queryKey: ['myLessons'],
@@ -23,12 +27,17 @@ const MyPage = () => {
     },
   });
   const lessons = myLessons?.lessons;
-  const point = myLessons?.point;
+  var point = 0;
+  if (myLessons) {
+    point = myLessons.point;
+  } else {
+    console.log('myLessons 로딩 오류');
+  }
 
   return (
     <div className='pt-6 px-5 pb-7'>
       <p className='font-hanaBold text-xl'>마이페이지</p>
-      <UserInfo username={username} hanaMoney={point} />
+      <UserInfo username={username} hanaMoney={formatNumber(point)} />
       <div className='flex justify-between mt-5'>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'

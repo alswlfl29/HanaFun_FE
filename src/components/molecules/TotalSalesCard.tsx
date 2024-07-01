@@ -9,6 +9,10 @@ interface Iprops {
   data: MonthSalesType[] | undefined;
 }
 
+const formatNumber = (value: number) => {
+  return new Intl.NumberFormat('ko-KR').format(value);
+};
+
 export const TotalSalesCard = ({ initYear, initMonth, data }: Iprops) => {
   const [year, setYear] = useState(initYear);
   const [month, setMonth] = useState(initMonth);
@@ -81,7 +85,7 @@ export const TotalSalesCard = ({ initYear, initMonth, data }: Iprops) => {
       </div>
 
       {/* month total */}
-      <p className='text-xl mt-6'>{monthTotal} 원</p>
+      <p className='text-xl mt-6'>{formatNumber(monthTotal)} 원</p>
 
       {/* chart */}
       <div className='w-80 h-52 ml-4 flex justify-center items-center'>

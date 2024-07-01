@@ -5,6 +5,11 @@ export const LessonDetail = () => {
   const place = '서울 성동구 연무장길';
   const materials = '건강한 신체';
   const description = '갱장한 클래스입니다. ';
+
+  const formatNumber = (value: number) => {
+    return new Intl.NumberFormat('ko-KR').format(value);
+  };
+
   return (
     <div className='mt-3 mb-32 px-5 py-3 w-[351px] h-[122px] font-hanaRegular text-xs bg-white rounded-2xl border-[1px] border-hanaSilver'>
       <div className='flex flex-row'>
@@ -16,7 +21,7 @@ export const LessonDetail = () => {
         <div className='ml-5'>
           <p>카테고리 : {category}</p>
           <p>모집 정원 : {people}명</p>
-          <p>가격 : {price}원</p>
+          <p>가격 : {formatNumber(price)}원</p>
           <p>장소 : {place}</p>
           <p>준비물 : {materials} </p>
           <p>상세설명 : {description}</p>
