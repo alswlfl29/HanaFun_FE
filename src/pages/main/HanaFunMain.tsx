@@ -113,7 +113,7 @@ export const HanaFunMain = () => {
       <div className='pt-5 px-5 mb-32'>
         <div className='flex items-end justify-between'>
           <p className='flex items-end font-hanaBold text-2xl'>
-            <img src='images/logo.svg' alt='logo' className='w-12 mr-2' />
+            <img src='/images/logo.svg' alt='logo' className='w-12 mr-2' />
             하나
             <span className='text-xl text-hanaGreen'>F</span>
             <span className='text-xl text-hanaRed'>u</span>
@@ -147,7 +147,7 @@ export const HanaFunMain = () => {
                   {showDropdown && (
                     <div className='absolute right-0 mr-11'>
                       <DropdownSingle
-                        image='images/qr.svg'
+                        image='/images/qr.svg'
                         text='QR생성'
                         handleClick={() => setShowKeypad(true)}
                       />
@@ -171,26 +171,26 @@ export const HanaFunMain = () => {
               <h1 className='text-white font-hanaBold whitespace-pre-line text-2xl'>{`취미 없인 못 살아!\n나의 취미를 찾는 방법`}</h1>
               <div className='flex text-white font-hanaMedium text-sm mt-2 justify-between'>
                 넘겨서 보기
-                <img src='images/mascot2.svg' alt='별돌이' className='w-30' />
+                <img src='/images/mascot2.svg' alt='별돌이' className='w-30' />
               </div>
             </div>
             <InfoCard
               Icon={TbCircleNumber1}
               title='인기 클래스를 확인해요'
               desc='대중적으로 인기가 많은 클래스에서 내 취향을 찾을 수 있어요.'
-              image='images/infocard1.svg'
+              image='/images/infocard1.svg'
             />
             <InfoCard
               Icon={TbCircleNumber2}
               title='탐색에서 원하는 클래스를 찾아봐요'
               desc='카테고리를 선택하고 듣고 싶은 클래스를 찾아서 신청할 수 있어요.'
-              image='images/infocard2.svg'
+              image='/images/infocard2.svg'
             />
             <InfoCard
               Icon={TbCircleNumber3}
               title='직접 호스트가 되어보아요'
               desc='간단한 클래스 개설로 나의 취미를 다른 사람들과 함께 나눌 수 있어요.'
-              image='images/infocard3.svg'
+              image='/images/infocard3.svg'
             />
             <>
               <div className='bg-hanaNavGreen h-56 flex justify-evenly items-center rounded-2xl text-white font-hanaBold whitespace-pre-line text-center px-4'>

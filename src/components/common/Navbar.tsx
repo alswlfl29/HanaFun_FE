@@ -5,35 +5,36 @@ const navbarItems = [
   {
     id: 1,
     location: '/',
-    inActive_icons: 'images/navbar/inactive_home.svg',
-    active_icons: 'images/navbar/active_home.svg',
+    inActive_icons: '/images/navbar/inactive_home.svg',
+    active_icons: '/images/navbar/active_home.svg',
     name: '홈',
   },
   {
     id: 2,
     location: '/search',
-    inActive_icons: 'images/navbar/inactive_search.svg',
-    active_icons: 'images/navbar/active_search.svg',
+    inActive_icons: '/images/navbar/inactive_search.svg',
+    active_icons: '/images/navbar/active_search.svg',
     name: '클래스탐색',
   },
   {
     id: 3,
     location: '/open-lesson',
-    inActive_icons: 'images/navbar/inactive_add.svg',
-    active_icons: 'images/navbar/active_add.svg',
+    inActive_icons: '/images/navbar/inactive_add.svg',
+    active_icons: '/images/navbar/active_add.svg',
     name: '클래스개설',
   },
   {
     id: 4,
     location: '/mypage',
-    inActive_icons: 'images/navbar/inactive_mypage.svg',
-    active_icons: 'images/navbar/active_mypage.svg',
+    inActive_icons: '/images/navbar/inactive_mypage.svg',
+    active_icons: '/images/navbar/active_mypage.svg',
     name: '마이페이지',
   },
 ];
 
 export const Navbar = () => {
   const location = useLocation();
+  console.log(location);
 
   return (
     <>

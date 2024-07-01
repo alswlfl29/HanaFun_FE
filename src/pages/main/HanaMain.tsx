@@ -45,7 +45,7 @@ export const HanaMain = () => {
         <div className='flex items-center justify-between'>
           <div className='flex items-center justify-center'>
             <img
-              src='images/hanaMain/person.svg'
+              src='/images/hanaMain/person.svg'
               alt='person'
               className='w-[1.8rem] cursor-pointer'
             />
@@ -153,18 +153,18 @@ export const HanaMain = () => {
       {/* 하나원큐 navbar */}
       <div className='absolute w-full bg-white rounded-t-[20px] bottom-0 h-36 px-5 pt-5 pb-6'>
         <div className='w-[500px] flex items-center gap-2'>
-          <HanaMainTag icon='images/hanaMain/hanaMainTag2.svg' name='운세' />
-          <HanaMainTag icon='images/hanaMain/hanaMainTag1.svg' name='상품몰' />
+          <HanaMainTag icon='/images/hanaMain/hanaMainTag2.svg' name='운세' />
+          <HanaMainTag icon='/images/hanaMain/hanaMainTag1.svg' name='상품몰' />
           <HanaMainTag
-            icon='images/hanaMain/hanaMainTag3.svg'
+            icon='/images/hanaMain/hanaMainTag3.svg'
             name='전체계좌'
           />
           <HanaMainTag
-            icon='images/hanaMain/hanaMainTag4.svg'
+            icon='/images/hanaMain/hanaMainTag4.svg'
             name='계좌이체'
           />
           <HanaMainTag
-            icon='images/hanaMain/hanaMainTag1.svg'
+            icon='/images/hanaMain/hanaMainTag1.svg'
             name='하나머니'
           />
         </div>
