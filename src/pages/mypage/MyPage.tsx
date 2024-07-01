@@ -11,7 +11,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate('/my-lesson-list');
+    navigate('/mypage/my-lesson-list');
   };
 
   // data 가져오기
@@ -32,7 +32,7 @@ const MyPage = () => {
       <div className='flex justify-between mt-5'>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'
-          onClick={() => navigate('/lesson-calendar')}
+          onClick={() => navigate('/mypage/lesson-calendar')}
         >
           <p className='font-hanaMedium text-base mt-6 ml-5'>
             신청 클래스 일정
@@ -45,7 +45,7 @@ const MyPage = () => {
         </div>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'
-          onClick={() => navigate('/host')}
+          onClick={() => navigate('/mypage/host')}
         >
           <img
             src='../images/mypage/pencil.png'

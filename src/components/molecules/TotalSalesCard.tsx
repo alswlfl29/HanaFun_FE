@@ -87,7 +87,7 @@ export const TotalSalesCard = ({ initYear, initMonth, data }: Iprops) => {
       <div className='w-80 h-52 ml-4 flex justify-center items-center'>
         <PieChart data={data} />
       </div>
-      <LessonSalesList data={data} />
+      <LessonSalesList year={year} data={data} />
     </div>
   );
 };

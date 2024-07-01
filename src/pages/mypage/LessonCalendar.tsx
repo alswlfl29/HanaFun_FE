@@ -70,7 +70,6 @@ export const LessonCalendar = () => {
         <p className='font-hanaMedium text-xl mt-5 ml-1'>클래스 상세 정보</p>
         <LessonDetail />
       </div>
-      <Navbar />
     </div>
   );
 };

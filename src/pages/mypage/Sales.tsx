@@ -23,7 +23,7 @@ export const Sales = () => {
 
   return (
     <div>
-      <Topbar title='매출 관리' onClick={() => navigate('/host')} />
+      <Topbar title='매출 관리' onClick={() => navigate('/mypage/host')} />
       <p className='font-hanaMedium text-xl mt-5 ml-5'>매출 관리</p>
       <div className='flex flex-col justify-center items-center'>
         <TotalSalesCard initYear={year} initMonth={month} data={monthRevenue} />

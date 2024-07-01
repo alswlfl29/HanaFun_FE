@@ -3,26 +3,34 @@ import { CgClose } from 'react-icons/cg';
 import { FiDelete } from 'react-icons/fi';
 import clsx from 'clsx';
 
-const Keypad = () => {
-  const [isVisible, setIsVisible] = useState(true);
-  //   const [inputValue, setInputValue] = useState('');
+interface IProps {
+  setValue: ((value: string) => void | null) | null;
+  closeKeypad: () => void;
+}
+
+const Keypad = ({ setValue, closeKeypad }: IProps) => {
+  // const [isVisible, setIsVisible] = useState(true);
+  // //   const [inputValue, setInputValue] = useState('');
   const [clickedButtons, setClickedButtons] = useState<number[]>([]);
 
-  const handleClose = () => {
-    setIsVisible(false);
-  };
+  // const handleClose = () => {
+  //   setIsVisible(false);
+  //   closeKeypad();
+  // };
 
   const handleButtonClick = (value: number) => {
-    // setInputValue((prev) => prev + value.toString());
-    setClickedButtons((prev) => [...prev, value]);
+    if (setValue) {
+      setValue((prev: string) => prev + value.toString());
+      setClickedButtons((prev) => [...prev, value]);
 
-    setTimeout(() => {
-      setClickedButtons((prev) => prev.filter((v) => v !== value));
-    }, 150);
+      setTimeout(() => {
+        setClickedButtons((prev) => prev.filter((v) => v !== value));
+      }, 150);
+    }
   };
 
   const handleDelete = () => {
-    // setInputValue((prev) => prev.slice(0, -1));
+    setValue((prev: any) => prev.slice(0, -1));
     setClickedButtons((prev) => [...prev, -1]);
 
     setTimeout(() => {
@@ -30,13 +38,13 @@ const Keypad = () => {
     }, 150);
   };
 
-  if (!isVisible) {
-    return null;
-  }
+  // if (!isVisible) {
+  //   return null;
+  // }
 
   return (
-    <div className='fixed bottom-0 w-[390px] h-[303px] bg-[#373A4D] py-6 rounded-t-2xl text-white text-2xl font-hanaBold'>
-      <CgClose className='w-5 h-5 ml-7 cursor-pointer' onClick={handleClose} />
+    <div className='fixed left-0 bottom-0 w-[390px] h-[303px] z-50 bg-[#373A4D] py-6 rounded-t-2xl text-white text-2xl font-hanaBold'>
+      <CgClose className='w-5 h-5 ml-7 cursor-pointer' onClick={closeKeypad} />
       {/* <input
         type='text'
         readOnly
@@ -62,7 +70,7 @@ const Keypad = () => {
                 key={num}
                 type='button'
                 className='p-4 rounded-lg bg-[#373A4D] text-white font-hanaRegular text-xl'
-                onClick={handleClose}
+                onClick={closeKeypad}
               >
                 완료
               </button>

@@ -22,6 +22,7 @@ import { LessonSearch } from './pages/search/LessonSearch.tsx';
 import { LessonDetail } from './pages/search/LessonDetail.tsx';
 import { PayLesson } from './pages/search/PayLesson.tsx';
 import { Sales } from './pages/mypage/Sales.tsx';
+import { SalesYear } from './pages/mypage/SalesYear.tsx';
 
 const router = createBrowserRouter([
   {
@@ -42,14 +43,18 @@ const router = createBrowserRouter([
           { path: '/search', element: <LessonSearch /> },
           { path: '/open-lesson', element: <OpenLessonMain /> },
           { path: '/mypage', element: <MyPage /> },
-          { path: '/lesson-calendar', element: <LessonCalendar /> },
-          { path: '/my-lesson-list', element: <MyLessonList /> },
-          { path: '/host', element: <HostPage /> },
+          { path: '/mypage/lesson-calendar', element: <LessonCalendar /> },
+          { path: '/mypage/my-lesson-list', element: <MyLessonList /> },
+          { path: '/mypage/host', element: <HostPage /> },
           {
-            path: '/host/lesson-calendar/1',
+            path: '/mypage/host/lesson-calendar/:lesson_id',
             element: <HostLessonCalendar />,
           },
-          { path: '/sales', element: <Sales /> },
+          { path: '/mypage/host/sales', element: <Sales /> },
+          {
+            path: '/mypage/host/sales/sales-year/:year/:lesson_id',
+            element: <SalesYear />,
+          },
         ],
       },
     ],

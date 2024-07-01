@@ -76,7 +76,7 @@ export const HostLessonCalendar = () => {
     <div>
       <Topbar
         title={lessonDetail ? lessonDetail.title : '클래스 이름'}
-        onClick={() => navigate('/host')}
+        onClick={() => navigate('/mypage/host')}
       />
       <MyCalendar
         data={calendarData || []}

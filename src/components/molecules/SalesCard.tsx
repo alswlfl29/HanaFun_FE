@@ -5,7 +5,7 @@ export const SalesCard = () => {
   return (
     <div
       className='w-[351px] h-[185px] mt-5 px-7 border-[1px] bg-white rounded-xl shadow-md flex justify-between cursor-pointer'
-      onClick={() => navigate('/sales')}
+      onClick={() => navigate('/mypage/host/sales')}
     >
       <div className='flex flex-col mt-10'>
         <p className='font-hanaMedium text-xl'>나의 매출액 관리</p>
