@@ -3,12 +3,13 @@ import { LuMinusCircle, LuPlusCircle } from 'react-icons/lu';
 import { AddLessonInputLabel } from '../Atom/AddLessonInputLabel';
 import { format } from 'date-fns';
 import { LessonTime } from '../../pages/openLesson/RegisterLesson';
+import { useModal } from '../../context/ModalContext';
 
 interface IProps {
   onChangeTimes: (lessontime: LessonTime[]) => void;
 }
 
-type timeType = {
+type TimeType = {
   id: number;
   date: Date | null;
   startTime: number | null;
@@ -17,7 +18,8 @@ type timeType = {
 
 export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
   const inputTimeNextID = useRef<number>(1);
-  const [inputTimeItems, setInputTimeItems] = useState<timeType[]>([
+  const { openModal, closeModal } = useModal();
+  const [inputTimeItems, setInputTimeItems] = useState<TimeType[]>([
     {
       id: 0,
       date: null,
@@ -25,6 +27,10 @@ export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
       endTime: null,
     },
   ]);
+
+  const handleCheckDuplicateDate = () => {
+    openModal('이미 선택된 날짜입니다.', closeModal);
+  };
 
   const addInput = () => {
     if (inputTimeItems.length >= 5) return;
@@ -43,6 +49,15 @@ export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
     setInputTimeItems(inputTimeItems.filter((item) => item.id !== index));
   };
 
+  const checkDuplicateDate = (date: string) => {
+    let isDuplicate = false;
+    inputTimeItems.map((time) => {
+      if ('' + time.date === format(new Date(date), 'yyyy-MM-dd'))
+        isDuplicate = true;
+    });
+    return isDuplicate;
+  };
+
   const handleInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -50,6 +65,16 @@ export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
   ) => {
     if (index > inputTimeItems.length) return;
     const inputItemsCopy = JSON.parse(JSON.stringify(inputTimeItems));
+    if (
+      inputTimeItems.length > 1 &&
+      inputTimeItems[0].date &&
+      name === 'date' &&
+      checkDuplicateDate(e.target.value)
+    ) {
+      handleCheckDuplicateDate();
+      setInputTimeItems(inputTimeItems.filter((item) => item.id !== index));
+      return;
+    }
     inputItemsCopy[index][name] = e.target.value;
     setInputTimeItems(inputItemsCopy);
   };
@@ -99,8 +124,11 @@ export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
                     new Date(new Date().setDate(new Date().getDate())),
                     'yyyy-MM-dd'
                   )}
+                  value={
+                    item.date ? format(new Date(item.date), 'yyyy-MM-dd') : ''
+                  }
                   className='w-full text-center rounded border-[0.7px] border-hanaSilver text-xs placeholder:text-hanaSilver p-2 focus:outline-none'
-                  onBlur={(e) => handleInput(e, 'date', index)}
+                  onChange={(e) => handleInput(e, 'date', index)}
                 />
                 {index === 0 ? (
                   <LuPlusCircle

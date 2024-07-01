@@ -19,7 +19,7 @@ export const ModalBottomContainer: FC<IProps> = ({
         onClick={() => onClose()}
       ></div>
       <div
-        className={`absolute w-full flex flex-col justify-center items-center bg-[${color}] rounded-t-2xl pt-5 bottom-0 left-0 z-[70] gap-3`}
+        className={`fixed max-w-[390px] w-full h-auto flex flex-col justify-center items-center bg-[${color}] rounded-t-2xl pt-5 bottom-0 z-[70] gap-3`}
       >
         <IoMdClose
           size={25}

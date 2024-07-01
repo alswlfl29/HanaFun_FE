@@ -60,7 +60,7 @@ export const SelectAddress: FC<IProps> = ({ onChangeAddress }) => {
           />
         </ModalBottomContainer>
       )}
-      <div className='mb-5'>
+      <div className='mb-5 px-5'>
         <h1 className='font-hanaBold text-lg flex items-end mb-1'>장소</h1>
         <div className='flex flex-col gap-2'>
           <p className='flex items-center gap-2'>

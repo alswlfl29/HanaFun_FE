@@ -128,7 +128,7 @@ export const PayLesson = () => {
       )}
       <Topbar title='결제' onClick={() => navigate(-1)} />
       {!isSend ? (
-        <div className='pt-5 px-5 mb-28'>
+        <div className='pt-5 mb-28'>
           <div className='mt-6'>
             <ChoiceAccount
               accounts={userDummyData.accounts}
@@ -138,7 +138,7 @@ export const PayLesson = () => {
           </div>
           <InputMoney maxMoney={state.payment} isChangeMoney={false} />
           <div
-            className='mt-16 flex items-center gap-2 font-hanaMedium text-hanaGreen text-sm'
+            className='px-5 mt-16 flex items-center gap-2 font-hanaMedium text-hanaGreen text-sm'
             onClick={() => {
               setCheckHanaMoney((prev) => !prev);
               setActiveBtn(checkHanaMoney);
@@ -151,7 +151,7 @@ export const PayLesson = () => {
             하나머니 사용하기
           </div>
           {checkHanaMoney && (
-            <>
+            <div className='px-5'>
               <div className='mt-2 flex justify-between items-center bg-hanaGreen rounded-2xl px-5 py-4 font-hanaRegular text-white'>
                 <p>하나머니 잔액</p>
                 {Number(3000).toLocaleString()}
@@ -178,7 +178,7 @@ export const PayLesson = () => {
                   </p>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
       ) : (

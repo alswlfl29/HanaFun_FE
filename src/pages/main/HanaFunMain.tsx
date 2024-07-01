@@ -12,6 +12,7 @@ import { AccountPwKeypad } from '../../components/organisms/AccountPwKeypad';
 import { Slide } from '../../components/organisms/Slide';
 import { QR } from '../../components/molecules/QR';
 import { AccountType } from '../../components/organisms/ChoiceAccount';
+import { RiQrScan2Line } from 'react-icons/ri';
 
 export const userDummyData = {
   userId: 1,
@@ -60,6 +61,26 @@ const bestLessonDummyData = [
     title: '나만의 반려식물, 테라리움 만들기5',
   },
 ];
+
+const accountSliderSettings = {
+  className: 'center',
+  centerMode: true,
+  infinite: true,
+  centerPadding: '15px',
+  slidesToShow: 1,
+  speed: 500,
+  draggable: true,
+  arrows: false,
+};
+
+const infoCardSliderSettings = {
+  dots: true,
+  slidesToShow: 1,
+  speed: 500,
+  draggable: true,
+  arrows: false,
+  infinite: false,
+};
 
 export const HanaFunMain = () => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -111,7 +132,7 @@ export const HanaFunMain = () => {
           onClose={() => setShowQr(false)}
         />
       )}
-      <div className='pt-5 px-5'>
+      <div className='pt-5 px-5 mb-32'>
         <div className='flex items-end justify-between'>
           <p className='flex items-end font-hanaBold text-2xl'>
             <img src='images/logo.svg' alt='logo' className='w-12 mr-2' />
@@ -124,8 +145,12 @@ export const HanaFunMain = () => {
             {userDummyData.name} <span className='text-black'>님</span>
           </p>
         </div>
-        <div className='mt-6 w-full flex items-center justify-center'>
-          <Slide>
+        {/* <button className='mt-6 flex justify-center items-center w-full bg-hanaNavGreen rounded-2xl py-2 font-hanaMedium gap-1.5 text-white'>
+          <RiQrScan2Line size={20} />
+          QR 스캔
+        </button> */}
+        <div className='mt-6 flex items-center justify-center'>
+          <Slide settings={accountSliderSettings} cssName='custom-slider'>
             {userDummyData.accounts.map((account) => (
               <div
                 key={account.accountId}
@@ -163,7 +188,7 @@ export const HanaFunMain = () => {
         </div>
 
         <div className='mt-6 w-full flex items-center justify-center'>
-          <Slide>
+          <Slide settings={infoCardSliderSettings} cssName='custom-slider2'>
             <div className='bg-hanaNavGreen pt-6 px-7 rounded-2xl h-56 overflow-hidden'>
               <h1 className='text-white font-hanaBold whitespace-pre-line text-2xl'>{`취미 없인 못 살아!\n나의 취미를 찾는 방법`}</h1>
               <div className='flex text-white font-hanaMedium text-sm mt-2 justify-between'>
@@ -198,7 +223,7 @@ export const HanaFunMain = () => {
           </Slide>
         </div>
 
-        <div className='mt-3'>
+        <div className='mt-8'>
           <h1 className='font-hanaBold text-xl mb-1.5'>인기클래스</h1>
           <div className='flex gap-2.5 overflow-x-auto scroll'>
             {bestLessonDummyData.map((item, index) => (

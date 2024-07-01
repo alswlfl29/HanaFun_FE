@@ -73,7 +73,7 @@ export const ChoiceAccount: FC<IProps> = ({
         </ModalBottomContainer>
       )}
       <div
-        className='flex justify-between items-center bg-[#F1F1F1] rounded-md px-4 py-3'
+        className='flex justify-between items-center bg-[#F1F1F1] rounded-md px-4 py-3 mx-5'
         onClick={() => setShowModal(true)}
       >
         <div className='flex flex-col items-start'>

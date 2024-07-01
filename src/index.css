@@ -33,3 +33,15 @@
 .scroll::-webkit-scrollbar {
   display: none;
 }
+.custom-slider .slick-slide > div {
+  padding: 0 5px;
+}
+
+.custom-slider .slick-list {
+  padding: 0 10px;
+}
+
+/* slick-slide 내부에 패딩을 추가하여 간격을 줍니다 */
+.custom-slider2 .slick-slide > div {
+  padding: 0 20px;
+}

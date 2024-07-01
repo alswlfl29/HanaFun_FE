@@ -21,7 +21,7 @@ export const PasswordKeypad: FC<IProps> = ({
       {[1, -1, 2, -1, 3, 4, 5, 6, 7, 8, 9, 0].map((num, index) => (
         <button
           key={index}
-          className='font-hanaBold text-xl flex justify-center items-center'
+          className='font-hanaBold text-xl flex justify-center items-center hover:bg-white/20 hover:rounded-md'
           onClick={() => clickKeypad(num)}
         >
           {num === -1 ? (

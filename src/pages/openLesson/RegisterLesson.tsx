@@ -141,7 +141,7 @@ export const RegisterLesson = () => {
       )}
       <Topbar title='클래스 등록' onClick={() => navigate('/open-lesson')} />
       {!isSend ? (
-        <div className='pt-5 px-5 pb-24 flex flex-col'>
+        <div className='pt-5 pb-24 flex flex-col'>
           <AddLessonInputLabel title='사진'>
             <input
               id='imgUploadInput'
@@ -172,8 +172,7 @@ export const RegisterLesson = () => {
             onChange={checkValid}
             ref={inputTitle}
           />
-
-          <div className='mb-5'>
+          <div className='mb-5 px-5'>
             <h1 className='font-hanaBold text-lg flex items-end mb-1'>
               카테고리
             </h1>
