@@ -216,7 +216,7 @@ export const RegisterLesson = () => {
         message={!isSend ? '등록' : '완료'}
         isActive={isBtnActive}
         onClick={() => {
-          !isSend ? handlePostAddLesson() : navigate('/mypage');
+          !isSend ? handlePostAddLesson() : navigate('/mypage/host');
         }}
       />
     </>

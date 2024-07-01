@@ -188,7 +188,7 @@ export const PayLesson = () => {
         message={!isSend ? '다음' : '완료'}
         isActive={!isSend ? activeBtn : true}
         onClick={() => {
-          !isSend ? setShowModal(true) : navigate('/my-lesson-list');
+          !isSend ? setShowModal(true) : navigate('/mypage/my-lesson-list');
         }}
       />
     </>

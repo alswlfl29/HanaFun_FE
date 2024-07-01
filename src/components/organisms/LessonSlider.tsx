@@ -23,7 +23,9 @@ export const LessonSlider = ({ data, show, option }: IProps) => {
   const handleConfirm = (reservation_id: number) => {
     console.log(reservation_id);
     // reservation_id 값으로 예약 취소 api 요청
-    openModal('예약이 취소되었습니다', () => navigate('/my-lesson-list'));
+    openModal('예약이 취소되었습니다', () =>
+      navigate('/mypage/my-lesson-list')
+    );
   };
 
   const handleReportConfirm = () => {
