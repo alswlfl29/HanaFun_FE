@@ -29,7 +29,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <App />,
     children: [
-      { path: '/main', element: <HanaMain /> },
+      { path: '/hana', element: <HanaMain /> },
       { path: '/login', element: <Login /> },
       { path: '/qr-pay', element: <QRPay /> },
       { path: '/open-lesson/host', element: <RegisterHost /> },

@@ -18,16 +18,16 @@ export const Alarm: FC<IProps> = ({ message, showAlarm, onClickShowAlarm }) => {
     } else {
       timer = setTimeout(() => {
         onClickShowAlarm(false);
-      }, 2000);
+      }, 1000);
     }
     return () => {
       clearTimeout(timer);
     };
-  }, [showAlarm]);
+  }, [activeAnimation]);
 
   return (
     <div
-      className={`fixed mx-4 w-[90%] py-2 bg-[#D9E8E6] text-black/70 rounded-xl font-hanaMedium text-center  ${activeAnimation ? 'animate-slidedown' : 'animate-slideup'}`}
+      className={`fixed mx-4 max-w-[351px] w-[90%] py-2 bg-[#D9E8E6] text-black/70 rounded-xl font-hanaMedium text-center  ${activeAnimation ? 'animate-slidedown' : 'animate-slideup'}`}
     >
       {message}
     </div>

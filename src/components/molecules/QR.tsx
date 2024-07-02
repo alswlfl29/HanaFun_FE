@@ -1,7 +1,8 @@
 import QRCode from 'qrcode.react';
-import { FC, useState } from 'react';
-import { QRScanner } from './QRScanner';
+import { FC, useEffect, useState } from 'react';
 import { ModalBottomContainer } from '../organisms/ModalBottomContainer';
+import { useTimer } from '../../hooks/useTimer';
+import { VscDebugRestart } from 'react-icons/vsc';
 
 interface IProps {
   userId: number;
@@ -18,41 +19,67 @@ export const QR: FC<IProps> = ({
   balance,
   onClose,
 }) => {
-  console.log(userId, accountId, accountNumber, balance);
-  const [isScan, setIsScan] = useState(false);
+  const [isTimeout, setIsTimeout] = useState<boolean>(false);
+  const [qrValue, setQrValue] = useState<string>('');
+  const [minute, second, resetTimer] = useTimer();
+
+  useEffect(() => {
+    setQrValue(
+      JSON.stringify({
+        userId,
+        accountId,
+        accountNumber,
+        balance,
+      })
+    );
+  }, [userId, accountId, accountNumber, balance]);
+
+  const handleReset = () => {
+    setQrValue(
+      JSON.stringify({
+        userId,
+        accountId,
+        accountNumber,
+        balance,
+      })
+    );
+    resetTimer();
+    setIsTimeout(false);
+  };
+
+  useEffect(() => {
+    if (minute === '00' && second === '00') setIsTimeout(true);
+  }, [minute, second]);
 
   return (
     <ModalBottomContainer onClose={onClose} color='#FFFFFF'>
-      <div
-        className='mt-12 mb-8 bg-[#D9D9D9] w-52 rounded-[2rem] px-2 py-1 flex justify-center items-center gap-2'
-        onClick={() => setIsScan(!isScan)}
-      >
-        <p
-          className={`h-10 w-1/2 rounded-[2rem] flex justify-center items-center text-sm font-hanaBold transition-all duration-200 ease-in ${isScan ? 'text-black/50 bg-transparent' : 'text-black bg-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.25)]'}`}
-        >
-          QR코드
-        </p>
-        <p
-          className={`h-10 w-1/2 rounded-[2rem] flex justify-center items-center text-sm font-hanaBold transition-all duration-200 ease-in ${isScan ? 'text-black bg-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.25)]' : 'text-black/50 bg-transparent'}`}
-        >
-          QR스캔
-        </p>
-      </div>
-      {isScan ? (
-        <QRScanner onClose={() => setIsScan(false)} />
-      ) : (
-        <div className='w-80 h-80 border-2 border-hanaSilver rounded-3xl overflow-hidden flex justify-center items-center mb-20'>
+      <div className='relative flex flex-col w-80 h-80 justify-between items-center mt-16 mb-12'>
+        <div className='w-72 h-72 flex justify-center items-center rounded-lg border border-hanaSilver p-8'>
           <QRCode
-            value={JSON.stringify({
-              userId,
-              accountId,
-              accountNumber,
-              balance,
-            })}
+            value={qrValue}
             size={220}
+            fgColor={!isTimeout ? 'black' : 'gray'}
           />
         </div>
-      )}
+        {isTimeout && (
+          <button
+            className='absolute mt-32 flex justify-center items-center gap-2 bg-hanaGreen w-10/12 rounded-2xl text-white font-hanaMedium py-1.5'
+            onClick={handleReset}
+          >
+            QR 다시 생성하기
+            <VscDebugRestart size={18} />
+          </button>
+        )}
+        <div className='flex justify-center items-center font-hanaRegular text-lg mt-5'>
+          {minute}:{second}
+          <p
+            className='absolute right-5 rounded-full border border-hanaSilver p-1 cursor-pointer'
+            onClick={handleReset}
+          >
+            <VscDebugRestart size={18} />
+          </p>
+        </div>
+      </div>
     </ModalBottomContainer>
   );
 };

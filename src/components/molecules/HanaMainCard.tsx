@@ -17,7 +17,7 @@ export const HanaMainCard: FC<IProps> = ({ id, Icon, message, color }) => {
     <div
       className='w-32 h-40 flex flex-col bg-white rounded-2xl cursor-pointer py-5 px-3.5 drop-shadow-[1px_3px_4px_rgba(0,0,0,0.1)]'
       onClick={() => {
-        id === 2 ? navigate('/') : undefined;
+        id === 2 ? navigate('/login') : undefined;
       }}
     >
       <Icon

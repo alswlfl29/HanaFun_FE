@@ -34,7 +34,6 @@ const navbarItems = [
 
 export const Navbar = () => {
   const location = useLocation();
-  console.log(location);
 
   return (
     <>

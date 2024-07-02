@@ -69,32 +69,36 @@ export const LessonDateChoice: FC<IProps> = ({ dateList, price }) => {
         <div className='w-[95%] border-2 border-black rounded'>
           <h2 className='py-4 px-4 font-hanaMedium text-base bg-[#FAFAFA]'>
             일정 선택
-          </h2>
-          {dateList.map((date, index) => (
-            <div key={date.lessondate_id}>
-              <div
-                className='px-4 py-4 flex flex-col justify-center gap-1 cursor-pointer'
-                onClick={() =>
-                  clickedChoiceDate(
-                    date.lessondate_id,
-                    formatDate(date.date, date.start_time, date.end_time),
-                    date.quantityLeft
-                  )
-                }
-              >
-                <p className='font-hanaRegular text-sm'>
-                  {formatDate(date.date, date.start_time, date.end_time)}
-                </p>
-                <p className='flex items-end gap-1 font-hanaBold text-sm'>
-                  {price.toLocaleString()}원
-                  <span className='font-hanaMedium text-xs text-hanaNavGray'>
-                    {date.quantityLeft}개 남음
-                  </span>
-                </p>
+          </h2>{' '}
+          <div className='max-h-56 overflow-y-scroll'>
+            {dateList.map((date, index) => (
+              <div key={date.lessondate_id}>
+                <div
+                  className='px-4 py-4 flex flex-col justify-center gap-1 cursor-pointer'
+                  onClick={() =>
+                    clickedChoiceDate(
+                      date.lessondate_id,
+                      formatDate(date.date, date.start_time, date.end_time),
+                      date.quantityLeft
+                    )
+                  }
+                >
+                  <p className='font-hanaRegular text-sm'>
+                    {formatDate(date.date, date.start_time, date.end_time)}
+                  </p>
+                  <p className='flex items-end gap-1 font-hanaBold text-sm'>
+                    {price.toLocaleString()}원
+                    <span className='font-hanaMedium text-xs text-hanaNavGray'>
+                      {date.quantityLeft}개 남음
+                    </span>
+                  </p>
+                </div>
+                {index !== dateList.length && (
+                  <hr className='border-[#EEEEEC]' />
+                )}
               </div>
-              {index !== dateList.length && <hr className='border-[#EEEEEC]' />}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
         {choiceDate && (
           <div className='w-[95%] p-3 mt-8 bg-[#FAFAFA] border-[1px] border-hanaSilver rounded'>

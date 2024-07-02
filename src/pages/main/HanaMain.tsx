@@ -1,18 +1,12 @@
 import { AiOutlineClose } from 'react-icons/ai';
 import { FaBell, FaCalendarAlt, FaWallet } from 'react-icons/fa';
 import { FcAdvertising } from 'react-icons/fc';
-import { GoKebabHorizontal } from 'react-icons/go';
+import { GoChevronRight } from 'react-icons/go';
 import { HanaMainCard } from '../../components/molecules/HanaMainCard';
 import { IoMdFootball } from 'react-icons/io';
 import { BsAirplaneEnginesFill } from 'react-icons/bs';
 import { LuChevronRight } from 'react-icons/lu';
 import { HanaMainTag } from '../../components/molecules/HanaMainTag';
-
-const data = {
-  account_name: '영하나플러스통장',
-  account_number: '748-911331-31207',
-  balance: 184000,
-};
 
 const hanaMainNav = [
   {
@@ -80,27 +74,26 @@ export const HanaMain = () => {
 
         {/* 하나원큐 계좌 */}
         <div className='bg-white rounded-2xl mt-6 py-7 px-6 drop-shadow-[1px_3px_4px_rgba(0,0,0,0.1)]'>
-          <p className='font-hanaMedium flex items-center justify-between'>
-            <span className='text-xl'>{data.account_name}</span>
-            <span className='text-sm text-hanaSilver underline'>한도계좌</span>
-          </p>
-          <p className='font-hanaMedium text-sm text-hanaSilver mt-1'>
-            입출금 {data.account_number}
-            <span className='underline ml-2 cursor-pointer'>복사</span>
-          </p>
-          <p className='font-hanaBold text-2xl mt-5'>
-            {data.balance.toLocaleString()}
-            <span className='font-hanaMedium ml-1'>원</span>
-          </p>
-          <div className='flex items-center justify-between font-hanaMedium mt-9'>
-            <button className='w-[7.5rem] h-10 bg-[#EFF0F4] text-[#303031] rounded-[0.625rem]'>
+          <div className='flex flex-col justify-center items-center gap-1'>
+            <p className='font-hanaRegular text-sm text-black/70'>
+              로그인하고 안전하게
+            </p>
+            <p className='font-hanaMedium flex items-center text-xl'>
+              잔액을 조회하세요 <GoChevronRight size={25} />
+            </p>
+            <img
+              src='/images/hanaMain/bankbook.png'
+              alt='bankbook'
+              className='w-28'
+            />
+          </div>
+
+          <div className='flex items-center justify-between font-hanaMedium mt-2 gap-3'>
+            <button className='w-1/2 h-10 bg-[#EFF0F4] text-[#303031] rounded-[0.625rem]'>
               가져오기
             </button>
-            <button className='w-[7.5rem] h-10 bg-[#1EA698] text-white rounded-[0.625rem]'>
+            <button className='w-1/2 h-10 bg-[#1EA698] text-white rounded-[0.625rem]'>
               보내기
-            </button>
-            <button className='w-10 h-10 bg-[#EFF0F4] rounded-[0.625rem] flex justify-center items-center'>
-              <GoKebabHorizontal color='#616267' />
             </button>
           </div>
         </div>

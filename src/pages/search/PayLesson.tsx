@@ -88,8 +88,10 @@ export const PayLesson = () => {
           onClose={() => setShowModal(false)}
         >
           <h1 className='font-hanaRegular text-xl text-[#B6B6B6]'>
-            <span className='font-hanaBold text-black'>{state.payment}</span>원
-            결제합니다.
+            <span className='font-hanaBold text-black'>
+              {state.payment.toLocaleString()}
+            </span>
+            원 결제합니다.
           </h1>
           <hr className='w-[85%]' />
           <div className='w-[85%] mt-3 flex flex-col gap-3 mb-44'>

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../../components/common/Topbar';
 import { Button } from '../../components/common/Button';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
 import { FaCamera } from 'react-icons/fa';
 import { SelectAddress } from '../../components/molecules/SelectAddress';
@@ -50,7 +50,6 @@ export const RegisterLesson = () => {
       const file = e.target.files[0];
       const imageUrl = URL.createObjectURL(file);
       setUploadImageFile(imageUrl);
-      checkValid();
       // const formData = new FormData();
       // if (file) {
       //   formData.append('file', file);
@@ -62,23 +61,19 @@ export const RegisterLesson = () => {
   const onChangeCategory = (category: string) => {
     setCategory(category);
     setShowModal(false);
-    checkValid();
   };
 
   const onChangeLessonTime = (lessontime: LessonTime[]) => {
     setLessonTime(lessontime);
-    checkValid();
   };
 
   const onChangeMaterials = (materials: string) => {
     setMaterials(materials);
-    checkValid();
   };
 
   const onChangeAddress = (address: string) => {
     if (address && address.length !== 1) {
       setAddress(address);
-      checkValid();
     }
   };
 
@@ -93,6 +88,14 @@ export const RegisterLesson = () => {
       address === '' ||
       inputDetailInfo.current?.value === ''
     ) {
+      setIsBtnActive(false);
+      return;
+    }
+    if (inputPrice.current && +inputPrice.current.value <= 0) {
+      setIsBtnActive(false);
+      return;
+    }
+    if (inputCapacity.current && +inputCapacity.current.value <= 0) {
       setIsBtnActive(false);
       return;
     }
@@ -112,6 +115,10 @@ export const RegisterLesson = () => {
     console.log('상세설명>>', inputDetailInfo.current?.value);
     setIsSend(true);
   };
+
+  useEffect(() => {
+    checkValid();
+  }, [uploadImageFile, category, lessonTime, materials, address]);
 
   return (
     <>
@@ -169,7 +176,7 @@ export const RegisterLesson = () => {
             type='text'
             title='강좌명'
             placeholder='강좌명을 입력해주세요.(최대 50자)'
-            onChange={checkValid}
+            onChange={() => checkValid()}
             ref={inputTitle}
           />
           <div className='mb-5 px-5'>
@@ -186,14 +193,14 @@ export const RegisterLesson = () => {
             type='number'
             title='모집인원'
             placeholder='모집인원을 입력해주세요.'
-            onChange={checkValid}
+            onChange={() => checkValid()}
             ref={inputCapacity}
           />
           <AddLessonInput
             type='number'
             title='가격'
             placeholder='가격을 입력해주세요.'
-            onChange={checkValid}
+            onChange={() => checkValid()}
             ref={inputPrice}
           />
           <AddLessonTimeList onChangeTimes={onChangeLessonTime} />
@@ -204,7 +211,7 @@ export const RegisterLesson = () => {
               ref={inputDetailInfo}
               placeholder='상세 설명을 입력해주세요. (200자 이내)'
               maxLength={200}
-              onChange={checkValid}
+              onChange={() => checkValid()}
               className='w-full h-36 rounded-md border-[0.7px] border-hanaSilver text-xs placeholder:text-hanaSilver p-3 focus:outline-none'
             ></textarea>
           </AddLessonInputLabel>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GoKebabHorizontal } from 'react-icons/go';
 import DropdownSingle from '../../components/common/DropdownSingle';
 import { InfoCard } from '../../components/molecules/InfoCard';
@@ -14,6 +14,9 @@ import { QR } from '../../components/molecules/QR';
 import { AccountType } from '../../components/organisms/ChoiceAccount';
 import { RiQrScan2Line } from 'react-icons/ri';
 import { Lessondata } from '../search/LessonSearch';
+import { getCookie } from '../../utils/cookie';
+import { useNavigate } from 'react-router-dom';
+import { QRScanner } from '../../components/molecules/QRScanner';
 
 export const userDummyData = {
   userId: 1,
@@ -61,9 +64,11 @@ const infoCardSliderSettings = {
 };
 
 export const HanaFunMain = () => {
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [showKeypad, setShowKeypad] = useState<boolean>(false);
   const [showQr, setShowQr] = useState<boolean>(false);
+  const [isScan, setIsScan] = useState(false);
+  const [active, setActive] = useState<number | null>(null);
 
   const [selectedAccount, setSelectedAccount] = useState<AccountType>({
     accountId: -1,
@@ -76,12 +81,12 @@ export const HanaFunMain = () => {
     console.log('비밀번호>>', password);
     console.log('로그인');
     setShowKeypad(false);
-    setShowDropdown(false);
+    setActive(null);
     setShowQr(true);
   };
 
-  const clickedAccount = (account: AccountType) => {
-    setShowDropdown((showDropdown) => !showDropdown);
+  const clickedAccount = (account: AccountType, index: number) => {
+    handleModalOpen(index);
     setSelectedAccount({
       accountId: account.accountId,
       accountNumber: account.accountNumber,
@@ -90,14 +95,38 @@ export const HanaFunMain = () => {
     });
   };
 
+  const handleModalOpen = (index: number) => {
+    setActive(active === index ? null : index);
+  };
+
+  // useEffect(() => {
+  //   const token = getCookie('token');
+  //   if (!token) navigate('/hana');
+  // }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.lesson-card') && active !== null) {
+        setActive(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [active]);
+
   return (
     <>
+      {isScan && <QRScanner onClose={() => setIsScan(false)} />}
       {showKeypad && (
         <AccountPwKeypad
           handleClickedPassword={(pw: string) => sendAccountPassword(pw)}
           onClose={() => {
             setShowKeypad(false);
-            setShowDropdown(false);
+            setActive(null);
           }}
         />
       )}
@@ -110,31 +139,28 @@ export const HanaFunMain = () => {
           onClose={() => setShowQr(false)}
         />
       )}
-      <div className='pt-5 px-5 mb-32'>
-        <div className='flex items-end justify-between'>
-          <p className='flex items-end font-hanaBold text-2xl'>
-            <img src='/images/logo.svg' alt='logo' className='w-12 mr-2' />
-            하나
-            <span className='text-xl text-hanaGreen'>F</span>
-            <span className='text-xl text-hanaRed'>u</span>
-            <span className='text-xl text-hanaGold'>n</span>!
-          </p>
+      <div className='pt-8 px-5 mb-32'>
+        <div className='flex items-center justify-between'>
           <p className='font-hanaBold text-xl text-hanaGreen'>
             {userDummyData.name} <span className='text-black'>님</span>
           </p>
+          <button
+            className='flex justify-center items-center font-hanaMedium gap-1.5 text-base text-black/80'
+            onClick={() => setIsScan(true)}
+          >
+            <RiQrScan2Line size={20} />
+            QR스캔
+          </button>
         </div>
-        {/* <button className='mt-6 flex justify-center items-center w-full bg-hanaNavGreen rounded-2xl py-2 font-hanaMedium gap-1.5 text-white'>
-          <RiQrScan2Line size={20} />
-          QR 스캔
-        </button> */}
+
         <div className='mt-6 flex items-center justify-center'>
           <Slide settings={accountSliderSettings} cssName='custom-slider'>
-            {userDummyData.accounts.map((account) => (
+            {userDummyData.accounts.map((account, index) => (
               <div
                 key={account.accountId}
                 className='relative w-full bg-white rounded-2xl py-5 px-7 font-hanaBold'
               >
-                <div className='flex items-center justify-between'>
+                <div className='lesson-card flex items-center justify-between'>
                   <span className='text-black text-lg'>
                     {account.accountName}
                   </span>
@@ -142,9 +168,9 @@ export const HanaFunMain = () => {
                     color='#B5B5B5'
                     size={16}
                     className='rotate-90 cursor-pointer'
-                    onClick={() => clickedAccount(account)}
+                    onClick={() => clickedAccount(account, index)}
                   />
-                  {showDropdown && (
+                  {active === index && (
                     <div className='absolute right-0 mr-11'>
                       <DropdownSingle
                         image='/images/qr.svg'
