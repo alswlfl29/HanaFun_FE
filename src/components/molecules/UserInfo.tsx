@@ -14,7 +14,7 @@ export const UserInfo = ({ username, hanaMoney }: IProps) => {
           className='w-10 h-10'
         />
         <p className='font-hanaMedium text-xl text-hanaNavGreen pl-1'>
-          {hanaMoney}
+          {hanaMoney} P
         </p>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 
 interface IProps {
-  title: string;
+  title: string | undefined;
   onClick: () => void;
 }
 

@@ -5,6 +5,8 @@ import { LessonSlider } from '../../components/organisms/LessonSlider';
 import { ApiClient } from '../../apis/apiClient';
 import { useQuery } from '@tanstack/react-query';
 import { NotFindMyLesson } from '../../components/molecules/NotFindMyLesson';
+import { Loading } from '../Loading';
+import { ErrorPage } from '../ErrorPage';
 
 const MyPage = () => {
   const username = '오감자';
@@ -27,17 +29,36 @@ const MyPage = () => {
     },
   });
   const lessons = myLessons?.lessons;
-  var point = 0;
-  if (myLessons) {
-    point = myLessons.point;
-  } else {
-    console.log('myLessons 로딩 오류');
+
+  // 하나머니 호출 api
+  const {
+    data: point,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['point'],
+    queryFn: async () => {
+      const response = await ApiClient.getInstance().getPoint();
+      return response.data;
+    },
+  });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    console.log('point error', point);
+    return <ErrorPage />;
   }
 
   return (
     <div className='pt-6 px-5 pb-7'>
       <p className='font-hanaBold text-xl'>마이페이지</p>
-      <UserInfo username={username} hanaMoney={formatNumber(point)} />
+      <UserInfo
+        username={username}
+        hanaMoney={formatNumber(Number(point?.point) || 0)}
+      />
       <div className='flex justify-between mt-5'>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'

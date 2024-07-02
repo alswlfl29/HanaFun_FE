@@ -17,6 +17,7 @@ export const MyCalendar = ({ data, setSelectedLesson }: IProps) => {
     onChange(date);
     const selectedDate = moment(date).format('YYYY-MM-DD');
     const lessons = data.filter((lesson) => lesson.date === selectedDate);
+    console.log('확인', lessons);
     setSelectedLesson(lessons);
   };
 

@@ -1,0 +1,3 @@
+interface PointType {
+  point: number;
+}

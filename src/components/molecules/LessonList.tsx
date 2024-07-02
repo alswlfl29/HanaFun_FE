@@ -1,5 +1,5 @@
 interface LessonListProps {
-  selectedLesson: CommonLessonType[];
+  selectedLesson: HostLessonDetailType[];
   handleLessonDetail: (lesson_id: number) => void;
 }
 
@@ -10,9 +10,9 @@ export const LessonList = ({
   return (
     <div className='mt-3 px-5 py-4 w-[351px] h-[122px] bg-white rounded-2xl border-[1px] border-hanaSilver overflow-y-auto'>
       {selectedLesson.length > 0 ? (
-        selectedLesson.map((lesson) => (
+        selectedLesson.map((lesson, idx) => (
           <p
-            key={lesson.lesson_id}
+            key={lesson.lesson_id || idx}
             className='font-hanaRegular text-base cursor-pointer'
             onClick={() => handleLessonDetail(lesson.lesson_id)}
           >

@@ -1,10 +1,14 @@
-export const LessonDetail = () => {
-  const category = '베이킹';
-  const people = 3;
-  const price = 30000;
-  const place = '서울 성동구 연무장길';
-  const materials = '건강한 신체';
-  const description = '갱장한 클래스입니다. ';
+interface Iprops {
+  lessonDetail: BaseResponseType<LessonDetailType> | null | undefined;
+}
+
+export const LessonDetail = ({ lessonDetail }: Iprops) => {
+  const category = lessonDetail?.data?.category_name;
+  const people = lessonDetail?.data?.capacity;
+  const price = lessonDetail?.data?.price;
+  const place = lessonDetail?.data?.location;
+  const materials = lessonDetail?.data?.materials;
+  const description = lessonDetail?.data?.description;
 
   const formatNumber = (value: number) => {
     return new Intl.NumberFormat('ko-KR').format(value);
@@ -21,7 +25,7 @@ export const LessonDetail = () => {
         <div className='ml-5'>
           <p>카테고리 : {category}</p>
           <p>모집 정원 : {people}명</p>
-          <p>가격 : {formatNumber(price)}원</p>
+          <p>가격 : {formatNumber(Number(price) || 0)} 원</p>
           <p>장소 : {place}</p>
           <p>준비물 : {materials} </p>
           <p>상세설명 : {description}</p>

@@ -1,16 +1,17 @@
 import { HostLessonInfo } from '../molecules/HostLessonInfo';
 
 interface IProps {
-  data: HostLessonInfoType[] | undefined;
+  data: HostLessonType[] | undefined;
 }
 
 export const HostLessonSlider = ({ data }: IProps) => {
+  console.log(data);
   return (
-    <div className='h-80 mt-5 pt-20 pb-2 flex flex-col items-center justify-center overflow-y-scroll scrollbar-hide'>
-      {data?.map((lesson) => (
+    <div className='h-80 mt-5 pb-2 flex flex-col items-center overflow-y-scroll scrollbar-hide'>
+      {data?.map((lesson, idx) => (
         <HostLessonInfo
-          key={lesson.lesson_id}
-          lesson_id={lesson.lesson_id}
+          key={lesson.lessonId || idx}
+          lessonId={lesson.lessonId}
           image={lesson.image}
           title={lesson.title}
         />

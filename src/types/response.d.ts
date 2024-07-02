@@ -1,11 +1,5 @@
-interface BaseResponseType {
-  code: string;
+interface BaseResponseType<T> {
+  isSuccess: boolean;
   message: string;
-  status: number;
-  success: boolean;
-  timestamp: string;
-}
-
-interface ApiResponseType<T> extends Required<BaseResponseType> {
-  data: T;
+  data?: T;
 }
