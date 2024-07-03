@@ -17,7 +17,7 @@ export const PopularLessonItem: FC<IProps> = ({ id, img, title }) => {
       <div className='w-36 rounded-xl overflow-hidden'>
         <img src={img} alt='클래스 사진' className='w-full' />
       </div>
-      <p className='font-hanaRegular text-sm overflow-hidden whitespace-nowrap text-ellipsis break-all'>
+      <p className='font-hanaMedium text-sm overflow-hidden whitespace-nowrap text-ellipsis break-all'>
         {title}
       </p>
     </div>

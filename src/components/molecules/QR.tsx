@@ -5,17 +5,15 @@ import { useTimer } from '../../hooks/useTimer';
 import { VscDebugRestart } from 'react-icons/vsc';
 
 interface IProps {
-  userId: number;
   accountId: number;
-  accountNumber: string;
+
   balance: number;
   onClose: () => void;
 }
 
 export const QR: FC<IProps> = ({
-  userId,
   accountId,
-  accountNumber,
+
   balance,
   onClose,
 }) => {
@@ -26,20 +24,17 @@ export const QR: FC<IProps> = ({
   useEffect(() => {
     setQrValue(
       JSON.stringify({
-        userId,
         accountId,
-        accountNumber,
+
         balance,
       })
     );
-  }, [userId, accountId, accountNumber, balance]);
+  }, [accountId, balance]);
 
   const handleReset = () => {
     setQrValue(
       JSON.stringify({
-        userId,
         accountId,
-        accountNumber,
         balance,
       })
     );

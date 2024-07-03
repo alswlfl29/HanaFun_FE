@@ -1,3 +1,8 @@
+export type LessonType = {
+  lessonId: number;
+  title: string;
+};
+
 interface LessonDetailType {
   lesson_id: number;
   image: string;

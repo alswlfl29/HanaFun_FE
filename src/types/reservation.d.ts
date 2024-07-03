@@ -5,8 +5,8 @@ interface HostLessonType {
 }
 
 interface HostLessonDetailType {
-  lessondate_id: number;
+  lessondateId: number;
   date: string;
-  lesson_id: number;
+  lessonId: number;
   title: string;
 }

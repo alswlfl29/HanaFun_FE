@@ -1,11 +1,7 @@
 import { useRef, useState } from 'react';
 import { Button } from '../../components/common/Button';
 import { Topbar } from '../../components/common/Topbar';
-import { userDummyData } from '../main/HanaFunMain';
-import {
-  AccountType,
-  ChoiceAccount,
-} from '../../components/organisms/ChoiceAccount';
+import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
 import { InputMoney } from '../../components/Atom/InputMoney';
 import { FaRegCheckCircle } from 'react-icons/fa';
 import { changeMoneyFormat } from '../../utils/changeMoney';
@@ -132,11 +128,11 @@ export const PayLesson = () => {
       {!isSend ? (
         <div className='pt-5 mb-28'>
           <div className='mt-6'>
-            <ChoiceAccount
+            {/* <ChoiceAccount
               accounts={userDummyData.accounts}
               selectedAccount={selectedAccount}
               isSelectBtn={true}
-            />
+            /> */}
           </div>
           <InputMoney maxMoney={state.payment} isChangeMoney={false} />
           <div

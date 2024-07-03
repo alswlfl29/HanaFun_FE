@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { PasswordKeypad } from '../../components/molecules/PasswordKeypad';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { setCookie } from '../../utils/cookie';
+import { useModal } from '../../context/ModalContext';
 
 type PasswordType = {
   [number: number]: number;
@@ -17,6 +21,37 @@ export const Login = () => {
     6: -1,
   });
   const [current, setCurrent] = useState<number>(1);
+  const [isFalse, setIsFalse] = useState<boolean>(false);
+
+  const { mutate: login } = useMutation({
+    mutationFn: (password: string) => {
+      const res = ApiClient.getInstance().postLogin(password);
+      return res;
+    },
+    onSuccess: (data) => {
+      if (data.isSuccess) {
+        if (data.data?.jwt && data.data.userName) {
+          setCookie('token', data.data.jwt);
+          setCookie('username', data.data.userName);
+          navigate('/');
+        }
+      }
+    },
+    onError: (error: ErrorType) => {
+      if (!error.isSuccess) {
+        setIsFalse(true);
+        setPassword({
+          1: -1,
+          2: -1,
+          3: -1,
+          4: -1,
+          5: -1,
+          6: -1,
+        });
+        setCurrent(1);
+      }
+    },
+  });
 
   const onChangePassword = (number: number) => {
     if (current > 6) return;
@@ -33,9 +68,7 @@ export const Login = () => {
   const sendLogin = () => {
     let resultPw = '';
     [1, 2, 3, 4, 5, 6].map((num) => (resultPw += password[num]));
-    console.log('비밀번호>>', resultPw);
-    console.log('로그인');
-    navigate('/');
+    login(resultPw);
   };
 
   useEffect(() => {
@@ -45,7 +78,14 @@ export const Login = () => {
   return (
     <div className='bg-[#373A4D] h-screen pt-40 flex flex-col items-center'>
       <h3 className='text-white font-hanaMedium text-xl'>간편비밀번호 입력</h3>
-      <div className='flex justify-center items-center gap-5 mt-8'>
+      {isFalse && (
+        <p className='font-hanaLight text-white/50 text-sm mt-1'>
+          비밀번호를 다시 입력하세요.
+        </p>
+      )}
+      <div
+        className={`flex justify-center items-center gap-5 ${isFalse ? 'mt-4' : 'mt-10'}`}
+      >
         {[1, 2, 3, 4, 5, 6].map((num: number, index) => (
           <div
             key={index}

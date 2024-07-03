@@ -1,13 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../../components/common/Topbar';
 import { Button } from '../../components/common/Button';
-import { userDummyData } from '../main/HanaFunMain';
-import {
-  AccountType,
-  ChoiceAccount,
-} from '../../components/organisms/ChoiceAccount';
+import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
 import { useRef, useState } from 'react';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
+import { AccountType } from '../../types/account';
 
 export const RegisterHost = () => {
   const navigate = useNavigate();
@@ -39,11 +36,11 @@ export const RegisterHost = () => {
           </div>
           <div className='mt-5'>
             <h2 className='font-hanaBold text-xl mb-2 px-5'>입금계좌</h2>
-            <ChoiceAccount
+            {/* <ChoiceAccount
               accounts={userDummyData.accounts}
               selectedAccount={selectedAccountId}
               isSelectBtn={true}
-            />
+            /> */}
           </div>
           <div className='mt-5 px-5'>
             <h2 className='font-hanaBold text-xl mb-2'>소개</h2>

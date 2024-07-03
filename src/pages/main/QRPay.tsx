@@ -3,51 +3,44 @@ import { Topbar } from '../../components/common/Topbar';
 import { qrUserInfo } from '../../components/molecules/QRScanner';
 import { Button } from '../../components/common/Button';
 import { useEffect, useState } from 'react';
-import {
-  AccountType,
-  ChoiceAccount,
-} from '../../components/organisms/ChoiceAccount';
-import { userDummyData } from './HanaFunMain';
+import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
 import { InputMoney } from '../../components/Atom/InputMoney';
 import { ChoiceInput } from '../../components/molecules/ChoiceInput';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { ModalBottomContainer } from '../../components/organisms/ModalBottomContainer';
+import { useModal } from '../../context/ModalContext';
+import { LessonType } from '../../types/lesson';
+import { Loading } from '../Loading';
+import { QrPayReqType } from '../../types/transaction';
 
 export const QRPay = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { openModal, closeModal } = useModal();
 
   const userInfo: qrUserInfo = location.state;
   const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
-  const selectedAccount = (account: AccountType) => {}; // 호스트 계좌 ID
   const [showLessonList, setShowLessonList] = useState<boolean>(false);
-  const [selectedLesson, setSelectedLesson] =
-    useState<HostLessonInfoType | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<LessonType | null>(null);
   const [showLessonDateList, setShowLessonDateList] = useState<boolean>(false);
   const [selectedLessonDate, setSelectedLessonDate] =
     useState<HostLessonDetailType | null>(null);
   const [money, setMoney] = useState<number>(-1);
   const [isSend, setIsSend] = useState<boolean>(false);
 
-  const { data: hostLessons } = useQuery({
-    queryKey: ['hostLessons'],
-    queryFn: async () => {
-      const response = await ApiClient.getHostLesson();
-      return response;
+  const { mutate: postQrPay } = useMutation({
+    mutationFn: (reqData: QrPayReqType) => {
+      const res = ApiClient.getInstance().postQrPay(reqData);
+      return res;
+    },
+    onSuccess: (data) => {
+      if (data.isSuccess && data.data?.transactionId) setIsSend(true);
     },
   });
 
-  const { data: hostLessonDetail } = useQuery({
-    queryKey: ['hostLessonDetail'],
-    queryFn: async () => {
-      const response = await ApiClient.getHostLessonDetail();
-      return response;
-    },
-  });
-
-  const onChangeLesson = (lesson: HostLessonInfoType) => {
+  const onChangeLesson = (lesson: LessonType) => {
     setSelectedLesson(lesson);
     setShowLessonList(false);
     checkValid();
@@ -65,31 +58,68 @@ export const QRPay = () => {
 
   const checkValid = () => {
     if (
-      selectedLesson &&
-      selectedLessonDate &&
+      userInfo.accountId &&
+      hostInfo?.data?.account.accountId &&
+      selectedLesson?.lessonId &&
+      selectedLessonDate?.lessondateId &&
       money > 0 &&
       money <= userInfo.balance
     )
       setIsBtnActive(true);
     else setIsBtnActive(false);
   };
+
   const handleSendPayment = () => {
-    console.log('게스트ID>>', userInfo.userId);
-    console.log('출금계좌ID>>', userInfo.accountId);
-    console.log('입금계좌ID>>', 1);
-    console.log('클래스 ID>>', selectedLesson?.lesson_id);
-    console.log('클래스일정ID>>', selectedLessonDate?.lessondate_id);
-    console.log('지불금액>>', money);
-    setIsSend(true);
+    if (hostInfo && hostInfo.data && selectedLesson && selectedLessonDate) {
+      postQrPay({
+        withdrawId: userInfo.accountId,
+        depositId: hostInfo.data.account.accountId,
+        lessonId: selectedLesson.lessonId,
+        lessondateId: selectedLessonDate.lessondateId,
+        payment: money,
+      });
+    }
   };
 
   useEffect(() => {
-    checkValid();
-  }, [money, selectedLesson?.lesson_id, selectedLessonDate?.lessondate_id]);
+    if (!getHostInfoLoading && !getHostInfoError) checkValid();
+  }, [money, selectedLesson?.lessonId, selectedLessonDate?.lessondateId]);
+
+  const {
+    data: hostInfo,
+    isError: getHostInfoError,
+    isLoading: getHostInfoLoading,
+  } = useQuery({
+    queryKey: ['hostLessons', userInfo.accountId],
+    queryFn: async () => {
+      const response = await ApiClient.getInstance().getHostInfo();
+      return response;
+    },
+    retry: 1,
+  });
+
+  const { data: hostLessonDetail } = useQuery({
+    queryKey: ['hostLessonDetail', selectedLesson?.lessonId],
+    queryFn: async () => {
+      if (!selectedLesson || !selectedLesson.lessonId) return;
+      const response = await ApiClient.getInstance().getHostLessonDetailList(
+        selectedLesson.lessonId
+      );
+      return response;
+    },
+    enabled: !!selectedLesson && !!selectedLesson.lessonId,
+  });
+
+  if (getHostInfoLoading) return <Loading />;
+
+  if (getHostInfoError) {
+    openModal('호스트가 아닙니다. 호스트 등록을 먼저 해주세요.', closeModal);
+    navigate('/');
+  }
 
   return (
     <>
-      {hostLessons && showLessonList && (
+      {hostInfo && hostInfo.data && showLessonList && (
         <ModalBottomContainer
           color='#FFFFFF'
           onClose={() => setShowLessonList(false)}
@@ -98,7 +128,7 @@ export const QRPay = () => {
           <div className='w-full'>
             <hr />
             <div className='max-h-60 overflow-y-auto scrollbar-hide px-6 py-2'>
-              {hostLessons.map((lesson, idx) => (
+              {hostInfo.data?.lessonList.map((lesson, idx) => (
                 <div key={idx}>
                   <p
                     className='py-2 font-hanaRegular text-base cursor-pointer pl-1'
@@ -106,7 +136,7 @@ export const QRPay = () => {
                   >
                     {lesson.title}
                   </p>
-                  {idx !== hostLessons.length - 1 && <hr />}
+                  {idx + 1 !== hostInfo.data?.lessonList.length && <hr />}
                 </div>
               ))}
             </div>
@@ -122,7 +152,7 @@ export const QRPay = () => {
           <div className='w-full'>
             <hr />
             <div className='max-h-60 overflow-y-auto scrollbar-hide px-6 py-2'>
-              {hostLessonDetail.map((date, idx) => (
+              {hostLessonDetail.data?.map((date, idx) => (
                 <div key={idx}>
                   <p
                     className='py-2 font-hanaRegular text-base cursor-pointer pl-1'
@@ -130,7 +160,7 @@ export const QRPay = () => {
                   >
                     {date.date}
                   </p>
-                  {idx !== hostLessonDetail.length - 1 && <hr />}
+                  {idx + 1 !== hostLessonDetail.data?.length && <hr />}
                 </div>
               ))}
             </div>
@@ -138,48 +168,53 @@ export const QRPay = () => {
         </ModalBottomContainer>
       )}
       <Topbar title='QR결제' onClick={() => navigate('/')} />
-      {!isSend ? (
+      {hostInfo && hostInfo.data && (
         <>
-          <div className='pt-5 mb-11'>
-            <ChoiceAccount
-              accounts={[userDummyData.accounts[0]]}
-              selectedAccount={selectedAccount}
-              isSelectBtn={false}
-            />
-          </div>
-          <div className='px-5 mb-12'>
-            <h3 className='font-hanaBold mb-2'>클래스</h3>
-            <ChoiceInput
-              isChoice={!!selectedLesson}
-              content={
-                selectedLesson ? selectedLesson.title : '클래스를 선택해주세요.'
-              }
-              openModal={() => setShowLessonList(true)}
-            />
-            {selectedLesson && (
-              <>
-                <h3 className='font-hanaBold mt-6 mb-2'>클래스 일정</h3>
-                <ChoiceInput
-                  isChoice={!!selectedLessonDate}
-                  content={
-                    selectedLessonDate
-                      ? selectedLessonDate.date
-                      : '클래스 일정을 선택해주세요.'
-                  }
-                  openModal={() => setShowLessonDateList(true)}
+          {!isSend ? (
+            <>
+              <div className='pt-5 mb-11'>
+                <ChoiceAccount
+                  accounts={[hostInfo?.data?.account]}
+                  isSelectBtn={false}
                 />
-              </>
-            )}
-          </div>
+              </div>
+              <div className='px-5 mb-12'>
+                <h3 className='font-hanaBold mb-2'>클래스</h3>
+                <ChoiceInput
+                  isChoice={!!selectedLesson}
+                  content={
+                    selectedLesson
+                      ? selectedLesson.title
+                      : '클래스를 선택해주세요.'
+                  }
+                  openModal={() => setShowLessonList(true)}
+                />
+                {selectedLesson && (
+                  <>
+                    <h3 className='font-hanaBold mt-6 mb-2'>클래스 일정</h3>
+                    <ChoiceInput
+                      isChoice={!!selectedLessonDate}
+                      content={
+                        selectedLessonDate
+                          ? selectedLessonDate.date
+                          : '클래스 일정을 선택해주세요.'
+                      }
+                      openModal={() => setShowLessonDateList(true)}
+                    />
+                  </>
+                )}
+              </div>
 
-          <InputMoney
-            maxMoney={userInfo.balance}
-            isChangeMoney={true}
-            changeMoney={onChangeMoney}
-          />
+              <InputMoney
+                maxMoney={userInfo.balance}
+                isChangeMoney={true}
+                changeMoney={onChangeMoney}
+              />
+            </>
+          ) : (
+            <CompleteSend title2='결제 성공' />
+          )}
         </>
-      ) : (
-        <CompleteSend title2='결제 성공' />
       )}
       <Button
         message={!isSend ? '결제' : '완료'}

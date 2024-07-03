@@ -1,7 +1,6 @@
-// export interface usersApi {
-//   postLogin(): Promise<>;
-// }
+import { LoginType } from '../../types/user';
 
 export interface userApi {
-  getPoint(): Promise<BaseResponseType<PointType>>;
+  postLogin(password: string): Promise<BaseResponseType<LoginType>>;
+  getIsHost(): Promise<BaseResponseType<{ isHost: boolean }>>;
 }

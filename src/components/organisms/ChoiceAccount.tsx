@@ -1,18 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { ModalBottomContainer } from './ModalBottomContainer';
-
-export type AccountType = {
-  accountId: number;
-  accountName: string;
-  accountNumber: string;
-  balance: number;
-};
+import { AccountType } from '../../types/account';
 
 interface IProps {
   accounts: AccountType[];
-  selectedAccount: (accountInfo: AccountType) => void;
   isSelectBtn: boolean;
+  selectedAccount?: (accountInfo: AccountType) => void;
 }
 
 export const ChoiceAccount: FC<IProps> = ({
@@ -30,12 +24,11 @@ export const ChoiceAccount: FC<IProps> = ({
 
   const handleChangedAccount = (account: AccountType) => {
     setSelectedAccountInfo(account);
-    selectedAccount(account);
     setShowModal(false);
   };
 
   useEffect(() => {
-    selectedAccount(accounts[0]);
+    if (selectedAccount) selectedAccount(accounts[0]);
   }, []);
 
   return (

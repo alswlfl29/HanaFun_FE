@@ -40,6 +40,8 @@ export const AccountPwKeypad: FC<IProps> = ({
       let resultPw: string = '';
       [1, 2, 3, 4].map((num) => (resultPw += password[num]));
       handleClickedPassword(resultPw);
+      setPassword({ 1: -1, 2: -1, 3: -1, 4: -1 });
+      setCurrent(1);
     }
   }, [password]);
 

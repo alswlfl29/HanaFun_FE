@@ -11,57 +11,18 @@ import { PopularLessonItem } from '../../components/molecules/PopularLessonItem'
 import { AccountPwKeypad } from '../../components/organisms/AccountPwKeypad';
 import { Slide } from '../../components/organisms/Slide';
 import { QR } from '../../components/molecules/QR';
-import { AccountType } from '../../components/organisms/ChoiceAccount';
 import { RiQrScan2Line } from 'react-icons/ri';
-import { Lessondata } from '../search/LessonSearch';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 import { QRScanner } from '../../components/molecules/QRScanner';
-
-export const userDummyData = {
-  userId: 1,
-  name: '오감자',
-  accounts: [
-    {
-      accountId: 1,
-      accountName: '영하나플러스통장',
-      accountNumber: '748-911331-11111',
-      balance: 100000,
-    },
-    {
-      accountId: 2,
-      accountName: '영둘플러스통장',
-      accountNumber: '748-911331-22222',
-      balance: 200000,
-    },
-    {
-      accountId: 3,
-      accountName: '영셋플러스통장',
-      accountNumber: '748-911331-33333',
-      balance: 300000,
-    },
-  ],
-};
-
-const accountSliderSettings = {
-  className: 'center',
-  centerMode: true,
-  infinite: true,
-  centerPadding: '15px',
-  slidesToShow: 1,
-  speed: 500,
-  draggable: true,
-  arrows: false,
-};
-
-const infoCardSliderSettings = {
-  dots: true,
-  slidesToShow: 1,
-  speed: 500,
-  draggable: true,
-  arrows: false,
-  infinite: false,
-};
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { Loading } from '../Loading';
+import { AccountType, CheckPwReqType } from '../../types/account';
+import { Account_Slider_Over3_Settings } from '../../constants/accountSliderOver3Settings';
+import { Account_Slider_Under2_Settings } from '../../constants/accountSliderUnder2Settings';
+import { IntroCard_Slider_Settings } from '../../constants/introCardSliderSettings';
+import { useModal } from '../../context/ModalContext';
 
 export const HanaFunMain = () => {
   const navigate = useNavigate();
@@ -69,25 +30,59 @@ export const HanaFunMain = () => {
   const [showQr, setShowQr] = useState<boolean>(false);
   const [isScan, setIsScan] = useState(false);
   const [active, setActive] = useState<number | null>(null);
-
-  setCookie(
-    'token',
-    'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLsnbTrr7zsp4AiLCJ1c2VySWQiOjEsImlhdCI6MTcxOTkwNjc5OCwiZXhwIjoxNzE5OTEwMzk4fQ.XrNBs6nWmQanGcsMQZFNVHT-xPmvvOPb3icd1naFjrE'
-  );
-
   const [selectedAccount, setSelectedAccount] = useState<AccountType>({
     accountId: -1,
     accountName: '',
     accountNumber: '',
     balance: 0,
   });
+  const { openModal, closeModal } = useModal();
+  const username = getCookie('username');
+  const token = getCookie('token');
+
+  const { isLoading: isGetAccountList, data: accountList } = useQuery({
+    queryKey: [token, 'accountList'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getAccountList();
+      return res;
+    },
+  });
+
+  const { isLoading: isGetPopularLesson, data: popularLessonList } = useQuery({
+    queryKey: ['popularLessonList'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getSearchLessonAll({
+        query: '',
+        sort: 'popular',
+      });
+      return res;
+    },
+    staleTime: 10000,
+  });
+
+  const {
+    mutate: checkPw,
+    isPending: isCheckPwPeding,
+    isSuccess: isCheckPwSuccess,
+  } = useMutation({
+    mutationFn: (reqData: CheckPwReqType) => {
+      const res = ApiClient.getInstance().postCheckPw(reqData);
+      return res;
+    },
+    onSuccess: (data) => {
+      if (data.isSuccess && data.data?.check) {
+        setShowKeypad(false);
+        setActive(null);
+        setShowQr(true);
+      } else openModal('비밀번호가 일치하지 않습니다.', closeModal);
+    },
+  });
 
   const sendAccountPassword = (password: string) => {
-    console.log('비밀번호>>', password);
-    console.log('로그인');
-    setShowKeypad(false);
-    setActive(null);
-    setShowQr(true);
+    checkPw({
+      accountId: selectedAccount.accountId,
+      password: password,
+    });
   };
 
   const clickedAccount = (account: AccountType, index: number) => {
@@ -104,10 +99,10 @@ export const HanaFunMain = () => {
     setActive(active === index ? null : index);
   };
 
-  // useEffect(() => {
-  //   const token = getCookie('token');
-  //   if (!token) navigate('/hana');
-  // }, []);
+  useEffect(() => {
+    const token = getCookie('token');
+    if (!token) navigate('/hana');
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -123,6 +118,8 @@ export const HanaFunMain = () => {
     };
   }, [active]);
 
+  if (isGetAccountList && isGetPopularLesson) return <Loading />;
+
   return (
     <>
       {isScan && <QRScanner onClose={() => setIsScan(false)} />}
@@ -137,9 +134,7 @@ export const HanaFunMain = () => {
       )}
       {showQr && (
         <QR
-          userId={userDummyData.userId}
           accountId={selectedAccount.accountId}
-          accountNumber={selectedAccount.accountNumber}
           balance={selectedAccount.balance}
           onClose={() => setShowQr(false)}
         />
@@ -147,7 +142,7 @@ export const HanaFunMain = () => {
       <div className='pt-8 px-5 mb-32'>
         <div className='flex items-center justify-between'>
           <p className='font-hanaBold text-xl text-hanaGreen'>
-            {userDummyData.name} <span className='text-black'>님</span>
+            {username} <span className='text-black'>님</span>
           </p>
           <button
             className='flex justify-center items-center font-hanaMedium gap-1.5 text-base text-black/80'
@@ -159,45 +154,53 @@ export const HanaFunMain = () => {
         </div>
 
         <div className='mt-6 flex items-center justify-center'>
-          <Slide settings={accountSliderSettings} cssName='custom-slider'>
-            {userDummyData.accounts.map((account, index) => (
-              <div
-                key={account.accountId}
-                className='relative w-full bg-white rounded-2xl py-5 px-7 font-hanaBold'
-              >
-                <div className='lesson-card flex items-center justify-between'>
-                  <span className='text-black text-lg'>
-                    {account.accountName}
-                  </span>
-                  <GoKebabHorizontal
-                    color='#B5B5B5'
-                    size={16}
-                    className='rotate-90 cursor-pointer'
-                    onClick={() => clickedAccount(account, index)}
-                  />
-                  {active === index && (
-                    <div className='absolute right-0 mr-11'>
-                      <DropdownSingle
-                        image='/images/qr.svg'
-                        text='QR생성'
-                        handleClick={() => setShowKeypad(true)}
-                      />
-                    </div>
-                  )}
+          <Slide
+            settings={
+              accountList?.data && accountList.data.length > 2
+                ? Account_Slider_Over3_Settings
+                : Account_Slider_Under2_Settings
+            }
+            cssName={`custom-slider ${accountList?.data?.length === 1 && 'one-item'}`}
+          >
+            {accountList?.data &&
+              accountList.data.map((account, index) => (
+                <div
+                  key={account.accountId}
+                  className={`relative ${accountList.data?.length === 1 ? 'w-[351px]' : 'w-full'} bg-white rounded-2xl py-5 px-7 font-hanaBold`}
+                >
+                  <div className='lesson-card flex items-center justify-between'>
+                    <span className='text-black text-lg'>
+                      {account.accountName}
+                    </span>
+                    <GoKebabHorizontal
+                      color='#B5B5B5'
+                      size={16}
+                      className='rotate-90 cursor-pointer'
+                      onClick={() => clickedAccount(account, index)}
+                    />
+                    {active === index && (
+                      <div className='absolute right-0 mr-11'>
+                        <DropdownSingle
+                          image='/images/qr.svg'
+                          text='QR생성'
+                          handleClick={() => setShowKeypad(true)}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <p className='text-hanaSilver text-sm mt-0.5'>
+                    {account.accountNumber}
+                  </p>
+                  <p className='text-black text-lg flex justify-end mt-4'>
+                    {account.balance.toLocaleString()}원
+                  </p>
                 </div>
-                <p className='text-hanaSilver text-sm mt-0.5'>
-                  {account.accountNumber}
-                </p>
-                <p className='text-black text-lg flex justify-end mt-4'>
-                  {account.balance.toLocaleString()}원
-                </p>
-              </div>
-            ))}
+              ))}
           </Slide>
         </div>
 
         <div className='mt-6 w-full flex items-center justify-center'>
-          <Slide settings={infoCardSliderSettings} cssName='custom-slider2'>
+          <Slide settings={IntroCard_Slider_Settings} cssName='custom-slider2'>
             <div className='bg-hanaNavGreen pt-6 px-7 rounded-2xl h-56 overflow-hidden'>
               <h1 className='text-white font-hanaBold whitespace-pre-line text-2xl'>{`취미 없인 못 살아!\n나의 취미를 찾는 방법`}</h1>
               <div className='flex text-white font-hanaMedium text-sm mt-2 justify-between'>
@@ -234,15 +237,16 @@ export const HanaFunMain = () => {
 
         <div className='mt-8'>
           <h1 className='font-hanaBold text-xl mb-1.5'>인기클래스</h1>
-          <div className='flex gap-2.5 overflow-x-auto scroll'>
-            {Lessondata.map((item, index) => (
-              <PopularLessonItem
-                key={index}
-                id={item.lesson_id}
-                img={item.image}
-                title={item.title}
-              />
-            ))}
+          <div className='flex gap-2.5 overflow-x-scroll scrollbar-hide'>
+            {popularLessonList?.data &&
+              popularLessonList.data.map((item, index) => (
+                <PopularLessonItem
+                  key={index}
+                  id={item.lesson_id}
+                  img={item.image}
+                  title={item.title}
+                />
+              ))}
           </div>
         </div>
       </div>

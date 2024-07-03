@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { changeMoneyFormat } from '../../utils/changeMoney';
 
 interface IProps {
