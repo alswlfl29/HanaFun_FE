@@ -8,9 +8,7 @@ interface IProps {
 }
 
 export type qrUserInfo = {
-  userId: number;
   accountId: number;
-  accountNumber: string;
   balance: number;
 };
 
@@ -32,9 +30,7 @@ export const QRScanner: FC<IProps> = ({ onClose }) => {
     qrScanner.destroy();
     navigate('/qr-pay', {
       state: {
-        userId: parsedData.userId,
         accountId: parsedData.accountId,
-        accountNumber: parsedData.accountNumber,
         balance: parsedData.balance,
       },
     });
