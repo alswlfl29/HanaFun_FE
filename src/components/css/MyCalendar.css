@@ -1,0 +1,48 @@
+.react-calendar__tile--active {
+  background-color: #ded7bf;
+  border-radius: 50%;
+  color: black;
+  font-family: 'HanaMedium';
+}
+
+.react-calendar__navigation {
+  height: 20px;
+  border-radius: 20px 20px 0 0;
+
+  span {
+    font-family: 'HanaMedium';
+  }
+}
+
+.react-calendar__tile {
+  text-align: center;
+  width: 30px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: 'HanaLight';
+}
+/*hover, focus, 선택됐을 시 */
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus,
+.react-calendar__tile--active {
+  background: #cce6e7;
+  width: 12px;
+  border-radius: 20%;
+}
+
+.react-calendar__tile--now {
+  background: #ded7bf;
+  width: 30px;
+  border-radius: 20%;
+}
+
+.react-calendar__month-view__weekdays {
+  abbr {
+    font-size: 10px;
+    font-family: 'HanaLight';
+    text-decoration: none;
+  }
+}
