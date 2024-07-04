@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 export const NotFindMyLesson = () => {
   const navigate = useNavigate();
   const handleNavigate = () => {
-    navigate('/findClass'); // 클래스 탐색 탭으로 이동
+    navigate('/search'); // 클래스 탐색 탭으로 이동
   };
   return (
     <div className='font-hanaRegular text-center mt-14'>
