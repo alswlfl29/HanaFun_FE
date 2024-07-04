@@ -2,26 +2,37 @@ import { useState } from 'react';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 import { LessonSalesList } from '../organisms/LessonSalesList';
 import { PieChart } from './PieChart';
-
-interface Iprops {
-  initYear: number;
-  initMonth: number;
-  data: MonthSalesType[] | undefined;
-}
+import { useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
 
 const formatNumber = (value: number) => {
   return new Intl.NumberFormat('ko-KR').format(value);
 };
 
-export const TotalSalesCard = ({ initYear, initMonth, data }: Iprops) => {
+export const TotalSalesCard = () => {
+  const date = new Date();
+  const initYear: number = date.getFullYear();
+  const initMonth: number = date.getMonth() + 1;
+
   const [year, setYear] = useState(initYear);
   const [month, setMonth] = useState(initMonth);
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
+  const { data: monthRevenue } = useQuery({
+    queryKey: ['monthRevenue', year, month],
+    queryFn: async () => {
+      const response = await ApiClient.getInstance().getMonthRevenue(
+        year,
+        month
+      );
+      return response.data;
+    },
+  });
+
   const monthTotal =
-    data?.reduce((total, item) => total + item.revenue, 0) || 0;
+    monthRevenue?.reduce((total, item) => total + item.revenue, 0) || 0;
 
   const handlePreviousMonth = () => {
     if (month === 1) {
@@ -89,9 +100,9 @@ export const TotalSalesCard = ({ initYear, initMonth, data }: Iprops) => {
 
       {/* chart */}
       <div className='w-80 h-52 ml-4 flex justify-center items-center'>
-        <PieChart data={data} />
+        <PieChart data={monthRevenue} />
       </div>
-      <LessonSalesList year={year} data={data} />
+      <LessonSalesList year={year} data={monthRevenue} />
     </div>
   );
 };

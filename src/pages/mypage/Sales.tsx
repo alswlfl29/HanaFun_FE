@@ -8,26 +8,22 @@ import { ApiClient } from '../../apis/apiClient';
 // 매출 관리 페이지
 export const Sales = () => {
   const navigate = useNavigate();
-  const date = new Date();
-  const year: number = date.getFullYear();
-  const month: number = date.getMonth() + 1;
 
-  const { data: monthRevenue } = useQuery({
-    queryKey: ['monthRevenue'],
+  const { data: totalRevenue } = useQuery({
+    queryKey: ['totalRevenue'],
     queryFn: async () => {
-      const response = await ApiClient.getMonthSales();
-      return response;
+      const response = await ApiClient.getInstance().getTotal();
+      return response.data;
     },
   });
-  console.log(monthRevenue);
 
   return (
     <div>
       <Topbar title='매출 관리' onClick={() => navigate('/mypage/host')} />
       <p className='font-hanaMedium text-xl mt-5 ml-5'>매출 관리</p>
       <div className='flex flex-col justify-center items-center'>
-        <TotalSalesCard initYear={year} initMonth={month} data={monthRevenue} />
-        <TotalSales />
+        <TotalSalesCard />
+        <TotalSales data={totalRevenue} />
       </div>
     </div>
   );

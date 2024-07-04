@@ -1,29 +1,41 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsPencil } from 'react-icons/bs';
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
-import Keypad from '../common/Keypad';
 import { EditPrice } from './EditPrice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+interface IProps {
+  data: any;
+  lessonId: number;
+  year: number;
+}
 
 const formatNumber = (value: number) => {
   return new Intl.NumberFormat('ko-KR').format(value);
 };
 
-export const Calculator = () => {
+export const Calculator = ({ data, lessonId, year }: IProps) => {
   const currentMonth = new Date().getMonth() + 1;
-  const [month, setMonth] = useState(6);
-
+  const [month, setMonth] = useState(currentMonth);
   const [editPriceVisible, setEditPriceVisible] = useState(false);
-  const [keypadVisible, setKeypadVisible] = useState(false);
-  const [valueSetter, setValueSetter] = useState<
-    ((value: string) => void) | null
-  >(null);
 
-  const [totalSales, setTotalSales] = useState(762000);
-  const [totalPrice, setTotalPrice] = useState(250000);
-  const [materialPrice, setMaterialPrice] = useState(100000);
-  const [rentalPrice, setRentalPrice] = useState(100000);
-  const [etcPrice, setEtcPrice] = useState(50000);
+  const [totalSales, setTotalSales] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [materialPrice, setMaterialPrice] = useState(0);
+  const [rentalPrice, setRentalPrice] = useState(0);
+  const [etcPrice, setEtcPrice] = useState(0);
   const netProfit = totalSales - totalPrice;
+
+  useEffect(() => {
+    const currentMonthData = data.find((d: any) => d.month === month);
+    if (currentMonthData) {
+      setTotalSales(currentMonthData.totalRevenue);
+      setMaterialPrice(currentMonthData.materialPrice);
+      setRentalPrice(currentMonthData.rentalPrice);
+      setEtcPrice(currentMonthData.etcPrice);
+      setTotalPrice(currentMonthData.totalSales);
+    }
+  }, [month, data]);
 
   const handlePreviousMonth = () => {
     setMonth((prevMonth) => (prevMonth > 1 ? prevMonth - 1 : 1));
@@ -37,19 +49,47 @@ export const Calculator = () => {
 
   const openEditPrice = () => {
     setEditPriceVisible(true);
-    setKeypadVisible(true);
   };
 
   const closeEditPrice = () => {
     setEditPriceVisible(false);
-    setKeypadVisible(false);
   };
 
-  const saveEditPrice = (material: string, rental: string, etc: string) => {
-    setMaterialPrice(Number(material));
-    setRentalPrice(Number(rental));
-    setEtcPrice(Number(etc));
-    setTotalPrice(Number(material) + Number(rental) + Number(etc));
+  const reqData: PriceReqType = {
+    lessonId: lessonId,
+    year: year,
+    month: month,
+    materialPrice: materialPrice,
+    rentalPrice: rentalPrice,
+    etcPrice: etcPrice,
+  };
+  const queryClient = useQueryClient();
+  const { mutate: updatePrice } = useMutation({
+    mutationFn: async () => {
+      const response = await ApiClient.getInstance().updatePrice(reqData);
+      return response;
+    },
+    onSuccess: async (response) => {
+      console.log('성공');
+      if (response.data) {
+        setMaterialPrice(response.data.materialPrice);
+        setRentalPrice(response.data.rentalPrice);
+        setEtcPrice(response.data.etcPrice);
+        setTotalPrice(
+          response.data.materialPrice +
+            response.data.rentalPrice +
+            response.data.etcPrice
+        );
+        queryClient.invalidateQueries({ queryKey: ['monthRevenue'] });
+      }
+    },
+    onError: async () => {
+      console.log('에러');
+    },
+  });
+
+  const saveEditPrice = () => {
+    updatePrice();
   };
 
   return (
@@ -106,15 +146,14 @@ export const Calculator = () => {
         <EditPrice
           closeEditPrice={closeEditPrice}
           saveEditPrice={saveEditPrice}
-          setValue={setValueSetter}
+          initialMaterialPrice={materialPrice}
+          initialRentalPrice={rentalPrice}
+          initialEtcPrice={etcPrice}
+          setMaterialPrice={setMaterialPrice}
+          setRentalPrice={setRentalPrice}
+          setEtcPrice={setEtcPrice}
         />
       )}
-      {/* {keypadVisible && (
-        <Keypad
-          setValue={(value) => valueSetter && valueSetter(value)}
-          closeKeypad={() => setKeypadVisible(false)}
-        />
-      )} */}
     </div>
   );
 };

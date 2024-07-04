@@ -297,7 +297,6 @@ export class ApiClient
     return response.data;
   }
 
-  //---------revenue---------
   // 예약자 정보
   async peopleList(lessondateId: PeopleListReqType) {
     console.log('전달된 lessondate_id: ', lessondateId);
@@ -314,12 +313,45 @@ export class ApiClient
 
   //---------revenue---------
 
-  // 임의 데이터. 클래스 년/월 별 매출액
-  public static async getMonthSales(): Promise<MonthSalesType[]> {
-    const apiUrl = '/data/monthRevenue.json';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    return data;
+  async getTotal() {
+    const response = await this.axiosInstance.request<
+      BaseResponseType<TotalType>
+    >({
+      method: 'get',
+      url: '/revenue/total',
+    });
+    return response.data;
+  }
+
+  async getMonthRevenue(year: number, month: number) {
+    const response = await this.axiosInstance.request<
+      BaseResponseType<MonthRevenueType[]>
+    >({
+      method: 'get',
+      url: `/revenue/${year}/${month}`,
+    });
+    return response.data;
+  }
+
+  async getLessonRevenue(year: number, lessonId: number) {
+    const response = await this.axiosInstance.request<
+      BaseResponseType<LessonRevenue[]>
+    >({
+      method: 'get',
+      url: `/revenue/lesson/${year}/${lessonId}`,
+    });
+    return response.data;
+  }
+
+  async updatePrice(reqData: PriceReqType) {
+    const response = await this.axiosInstance.request<
+      BaseResponseType<PriceType>
+    >({
+      method: 'put',
+      url: '/revenue/update',
+      data: reqData,
+    });
+    return response.data;
   }
 
   static getInstance(): ApiClient {

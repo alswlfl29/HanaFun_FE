@@ -2,7 +2,7 @@ import { LessonSalesTotal } from '../molecules/LessonSalesTotal';
 
 interface IProps {
   year: number;
-  data: MonthSalesType[] | undefined;
+  data: MonthRevenueType[] | undefined;
 }
 
 export const LessonSalesList = ({ year, data }: IProps) => {
@@ -11,7 +11,7 @@ export const LessonSalesList = ({ year, data }: IProps) => {
       {data?.map((item, index) => (
         <LessonSalesTotal
           key={index}
-          lesson_id={item.lesson_id}
+          lesson_id={item.lessonId}
           title={item.title}
           lessonTotal={item.revenue}
           year={year}

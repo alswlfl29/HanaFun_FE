@@ -1,7 +1,7 @@
 import { ResponsivePie } from '@nivo/pie';
 
 interface IProps {
-  data: MonthSalesType[] | undefined;
+  data: MonthRevenueType[] | undefined;
 }
 
 export const PieChart = ({ data }: IProps) => {
