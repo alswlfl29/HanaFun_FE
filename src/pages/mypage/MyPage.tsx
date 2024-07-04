@@ -7,9 +7,10 @@ import { useQuery } from '@tanstack/react-query';
 import { NotFindMyLesson } from '../../components/molecules/NotFindMyLesson';
 import { Loading } from '../Loading';
 import { ErrorPage } from '../ErrorPage';
+import { getCookie } from '../../utils/cookie';
 
 const MyPage = () => {
-  const username = '오감자';
+  const username = getCookie('username');
   const navigate = useNavigate();
 
   const handleNavigate = () => {

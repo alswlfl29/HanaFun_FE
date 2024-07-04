@@ -51,6 +51,16 @@ export class ApiClient
     return response.data;
   }
 
+  async getPoint() {
+    const response = await this.axiosInstance.request<
+      BaseResponseType<PointType>
+    >({
+      method: 'get',
+      url: '/user/point',
+    });
+    return response.data;
+  }
+
   // ------- account -------
   async getAccountList() {
     const response = await this.axiosInstance.request<
@@ -134,23 +144,6 @@ export class ApiClient
     return response.data;
   }
 
-  // ------- mypage -------
-
-  // 하나머니 조회
-  async getPoint() {
-    const response = await this.axiosInstance.request<
-      BaseResponseType<PointType>
-    >({
-      method: 'get',
-      url: '/user/point',
-    });
-    return response.data;
-  }
-
-  //---------host---------
-
-  //---------account---------
-
   //---------transaction---------
   async postQrPay(reqData: QrPayReqType) {
     const response = await this.axiosInstance.request<
@@ -191,8 +184,6 @@ export class ApiClient
     });
     return response.data;
   }
-
-  //---------category---------
 
   //---------lesson---------
 

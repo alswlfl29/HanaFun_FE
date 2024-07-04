@@ -37,3 +37,8 @@ interface CreateLessonReqType {
   materials: string;
   lessonDate: LessonDateCommonType[];
 }
+
+interface CalendarDataType {
+  lesson_id: number;
+  date: string;
+}
