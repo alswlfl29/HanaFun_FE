@@ -2,18 +2,17 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { LuMinusCircle, LuPlusCircle } from 'react-icons/lu';
 import { AddLessonInputLabel } from '../Atom/AddLessonInputLabel';
 import { format } from 'date-fns';
-import { LessonTime } from '../../pages/openLesson/RegisterLesson';
 import { useModal } from '../../context/ModalContext';
 
 interface IProps {
-  onChangeTimes: (lessontime: LessonTime[]) => void;
+  onChangeTimes: (lessontime: LessonDateCommonType[]) => void;
 }
 
 type TimeType = {
   id: number;
   date: Date | null;
-  startTime: number | null;
-  endTime: number | null;
+  startTime: Date | null;
+  endTime: Date | null;
 };
 
 export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
@@ -75,12 +74,18 @@ export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
       setInputTimeItems(inputTimeItems.filter((item) => item.id !== index));
       return;
     }
-    inputItemsCopy[index][name] = e.target.value;
+    if (name !== 'date') {
+      const time_date = inputItemsCopy[index]['date']
+        ? inputItemsCopy[index]['date'] + ' ' + e.target.value + ':00'
+        : format(new Date(), 'yyyy-MM-dd') + ' ' + e.target.value + ':00';
+      inputItemsCopy[index][name] = time_date;
+    } else inputItemsCopy[index][name] = e.target.value;
+
     setInputTimeItems(inputItemsCopy);
   };
 
   const handlechangeTimes = () => {
-    let datetime: LessonTime[] = [];
+    let datetime: LessonDateCommonType[] = [];
     inputTimeItems.map((time) => {
       if (
         time.date !== null &&

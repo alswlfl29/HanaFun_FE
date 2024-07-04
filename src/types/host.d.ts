@@ -1,16 +1,13 @@
-import { AccountType } from './account';
-import { LessonType } from './lesson';
-
-type CreateHostReqType = {
+interface CreateHostReqType {
   accountId: number;
   introduction: string;
-};
+}
 
-type CreateHostResType = {
+interface CreateHostResType {
   hostId: number;
-};
+}
 
-type HostInfoType = {
+interface HostInfoType {
   account: AccountType;
   lessonList: LessonType[];
-};
+}

@@ -10,37 +10,6 @@ import { ApiClient } from '../../apis/apiClient';
 import { Loading } from '../Loading';
 import { SortCategories, SortType } from '../../constants/sortList';
 
-export const Lessondata = [
-  {
-    lesson_id: 5,
-    image: 'https://picsum.photos/200/200',
-    title: '맛있는 치즈케이크 만들기',
-    price: 60000,
-    host_name: '김헨리',
-  },
-  {
-    lesson_id: 6,
-    image: 'https://picsum.photos/200/200',
-    title: '수제 캔들 만들기',
-    price: 30000,
-    host_name: '김하나',
-  },
-  {
-    lesson_id: 7,
-    image: 'https://picsum.photos/200/200',
-    title: '클라이밍 배우기',
-    price: 30000,
-    host_name: '홍길동',
-  },
-  {
-    lesson_id: 8,
-    image: 'https://picsum.photos/200/200',
-    title: '재미있는 재테크',
-    price: 30000,
-    host_name: '별돌이',
-  },
-];
-
 export const LessonSearch = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<number>(-1);

@@ -5,18 +5,18 @@ export interface reservationApi {
     lesson_id: number
   ): Promise<BaseResponseType<HostLessonDetailType[]>>;
 
-  postLessonReservation(reqData: ReservationReqType): Promise<
-    BaseResponseType<{
-      reservationId: number;
-    }>
-  >;
+  postLessonReservation(
+    reqData: ReservationReqType
+  ): Promise<BaseResponseType<{ message: string }>>;
   getMyLesson(): Promise<BaseResponseType<MyLessonType>>;
 
   getMyLessonAll(): Promise<BaseResponseType<LessonType[]>>;
 
-  getMyLessonCalendar(): Promise<BaseResponseType<MyScheduleType[]>>;
+  // getMyLessonCalendar(): Promise<BaseResponseType<MyScheduleType[]>>;
 
-  cancelLesson(): Promise<BaseResponseType<CancelLessonReqType>>;
+  cancelLesson(
+    reservationId: CancelLessonReqType
+  ): Promise<CancleLessonResType>;
 
   peopleList(
     lessondate_id: PeopleListReqType

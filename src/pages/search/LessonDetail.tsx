@@ -52,13 +52,18 @@ export const LessonDetail = () => {
   };
 
   const splitMaterials = (materials: string) => {
-    setMaterials(materials.split(',').map((material) => material.trim()));
+    setMaterials(
+      materials
+        .split(',')
+        .filter((material) => material !== '')
+        .map((material) => material.trim())
+    );
   };
 
   useEffect(() => {
     if (lesson?.data && lesson.data?.materials !== '')
       splitMaterials(lesson.data.materials);
-  }, []);
+  }, [lesson]);
 
   if (isGetLessonLoading || isGetLessonDateLoading) return <Loading />;
 

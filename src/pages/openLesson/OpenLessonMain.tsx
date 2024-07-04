@@ -1,29 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { Topbar } from '../../components/common/Topbar';
 import { Button } from '../../components/common/Button';
-import { useState } from 'react';
-
-const infoHost = [
-  {
-    title: '호스트 등록',
-    desc: `간편한 방법으로\n호스트가 되어보세요.`,
-    image: '/images/openlesson1.gif',
-  },
-  {
-    title: '클래스 개설 및 운영',
-    desc: '진행할 클래스를 등록하고 운영해보세요.',
-    image: '/images/openlesson2.gif',
-  },
-  {
-    title: '정산 및 수익 관리',
-    desc: `매 수업마다 정산을 받을 수 있어요.\n하나펀에서 제공하는\n월별 수익 관리를 받아보세요.`,
-    image: '/images/openlesson3.gif',
-  },
-];
+import { InfoHost } from '../../constants/hostMain';
+import { useQuery } from '@tanstack/react-query';
+import { getCookie } from '../../utils/cookie';
+import { ApiClient } from '../../apis/apiClient';
 
 export const OpenLessonMain = () => {
   const navigate = useNavigate();
-  const [isHost, setIsHost] = useState<boolean>(true);
+
+  const { data: isHostData } = useQuery({
+    queryKey: ['isHost', getCookie('token')],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getIsHost();
+      return res;
+    },
+  });
 
   return (
     <>
@@ -55,7 +47,7 @@ export const OpenLessonMain = () => {
             <span className='text-hanaGreen font-hanaBold'>호스트</span>가 되는
             과정
           </h1>
-          {infoHost.map((info, index) => (
+          {InfoHost.map((info, index) => (
             <div key={index} className='w-full'>
               {index !== 1 ? (
                 <div className='flex justify-between items-center'>
@@ -93,7 +85,7 @@ export const OpenLessonMain = () => {
           isActive={true}
           message='클래스 개설하기'
           onClick={() => {
-            isHost
+            isHostData?.data?.isHost
               ? navigate('/open-lesson/lesson')
               : navigate('/open-lesson/host');
           }}

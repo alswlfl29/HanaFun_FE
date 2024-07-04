@@ -1,6 +1,5 @@
 interface PayCommonReqType {
   withdrawId: number;
-  lessondateId: number;
   payment: number;
 }
 
@@ -10,13 +9,14 @@ interface QrPayReqType extends PayCommonReqType {
 }
 
 interface SimplePayReqType extends PayCommonReqType {
+  lessondateId: number;
   reservationId: number;
   point: number;
 }
 
 interface PayResType {
   transactionId: number;
-};
+}
 
 interface PaybackReqType {
   reservationId: number;

@@ -22,9 +22,6 @@ export const QRPay = () => {
   const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
   const [showLessonList, setShowLessonList] = useState<boolean>(false);
   const [selectedLesson, setSelectedLesson] = useState<LessonType | null>(null);
-  const [showLessonDateList, setShowLessonDateList] = useState<boolean>(false);
-  const [selectedLessonDate, setSelectedLessonDate] =
-    useState<HostLessonDetailType | null>(null);
   const [money, setMoney] = useState<number>(-1);
   const [isSend, setIsSend] = useState<boolean>(false);
 
@@ -44,12 +41,6 @@ export const QRPay = () => {
     checkValid();
   };
 
-  const onChangeLessonDate = (date: HostLessonDetailType) => {
-    setSelectedLessonDate(date);
-    setShowLessonDateList(false);
-    checkValid();
-  };
-
   const onChangeMoney = (money: number) => {
     setMoney(money);
   };
@@ -59,7 +50,6 @@ export const QRPay = () => {
       userInfo.accountId &&
       hostInfo?.data?.account.accountId &&
       selectedLesson?.lessonId &&
-      selectedLessonDate?.lessondateId &&
       money > 0 &&
       money <= userInfo.balance
     )
@@ -68,12 +58,11 @@ export const QRPay = () => {
   };
 
   const handleSendPayment = () => {
-    if (hostInfo && hostInfo.data && selectedLesson && selectedLessonDate) {
+    if (hostInfo && hostInfo.data && selectedLesson) {
       postQrPay({
         withdrawId: userInfo.accountId,
         depositId: hostInfo.data.account.accountId,
         lessonId: selectedLesson.lessonId,
-        lessondateId: selectedLessonDate.lessondateId,
         payment: money,
       });
     }
@@ -81,7 +70,7 @@ export const QRPay = () => {
 
   useEffect(() => {
     if (!getHostInfoLoading && !getHostInfoError) checkValid();
-  }, [money, selectedLesson?.lessonId, selectedLessonDate?.lessondateId]);
+  }, [money, selectedLesson?.lessonId]);
 
   const {
     data: hostInfo,
@@ -94,18 +83,6 @@ export const QRPay = () => {
       return response;
     },
     retry: 1,
-  });
-
-  const { data: hostLessonDetail } = useQuery({
-    queryKey: ['hostLessonDetail', selectedLesson?.lessonId],
-    queryFn: async () => {
-      if (!selectedLesson || !selectedLesson.lessonId) return;
-      const response = await ApiClient.getInstance().getHostLessonDetailList(
-        selectedLesson.lessonId
-      );
-      return response;
-    },
-    enabled: !!selectedLesson && !!selectedLesson.lessonId,
   });
 
   if (getHostInfoLoading) return <Loading />;
@@ -141,30 +118,6 @@ export const QRPay = () => {
           </div>
         </ModalBottomContainer>
       )}
-      {hostLessonDetail && showLessonDateList && (
-        <ModalBottomContainer
-          color='#FFFFFF'
-          onClose={() => setShowLessonDateList(false)}
-        >
-          <h3 className='font-hanaBold text-lg'>클래스 일정을 선택해주세요.</h3>
-          <div className='w-full'>
-            <hr />
-            <div className='max-h-60 overflow-y-auto scrollbar-hide px-6 py-2'>
-              {hostLessonDetail.data?.map((date, idx) => (
-                <div key={idx}>
-                  <p
-                    className='py-2 font-hanaRegular text-base cursor-pointer pl-1'
-                    onClick={() => onChangeLessonDate(date)}
-                  >
-                    {date.date}
-                  </p>
-                  {idx + 1 !== hostLessonDetail.data?.length && <hr />}
-                </div>
-              ))}
-            </div>
-          </div>
-        </ModalBottomContainer>
-      )}
       <Topbar title='QR결제' onClick={() => navigate('/')} />
       {hostInfo && hostInfo.data && (
         <>
@@ -187,22 +140,7 @@ export const QRPay = () => {
                   }
                   openModal={() => setShowLessonList(true)}
                 />
-                {selectedLesson && (
-                  <>
-                    <h3 className='font-hanaBold mt-6 mb-2'>클래스 일정</h3>
-                    <ChoiceInput
-                      isChoice={!!selectedLessonDate}
-                      content={
-                        selectedLessonDate
-                          ? selectedLessonDate.date
-                          : '클래스 일정을 선택해주세요.'
-                      }
-                      openModal={() => setShowLessonDateList(true)}
-                    />
-                  </>
-                )}
               </div>
-
               <InputMoney
                 maxMoney={userInfo.balance}
                 isChangeMoney={true}

@@ -11,23 +11,9 @@ import { AddLessonInput } from '../../components/molecules/AddLessonInput';
 import { AddLessonMaterialList } from '../../components/molecules/AddLessonMaterialList';
 import { AddLessonTimeList } from '../../components/molecules/AddLessonTimeList';
 import { ChoiceInput } from '../../components/molecules/ChoiceInput';
-
-export const categories = [
-  '요리',
-  '여행',
-  '스포츠',
-  '예술',
-  '심리상담',
-  '재테크',
-  '자기계발',
-  '뷰티',
-];
-
-export type LessonTime = {
-  date: Date;
-  startTime: number;
-  endTime: number;
-};
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ApiClient } from '../../apis/apiClient';
+import { ImageApiClient } from '../../apis/imageApiClient';
 
 export const RegisterLesson = () => {
   const navigate = useNavigate();
@@ -35,35 +21,78 @@ export const RegisterLesson = () => {
   const [isSend, setIsSend] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [uploadImageFile, setUploadImageFile] = useState<string | null>(null);
+  const [file, setFile] = useState<File>();
+  const [uploadImageUrl, setUploadImageUrl] = useState<string | null>(null);
   const inputTitle = useRef<HTMLInputElement | null>(null);
-  const [category, setCategory] = useState<string>('');
+  const [category, setCategory] = useState<CategoryType>();
   const [address, setAddress] = useState<string>('');
   const inputCapacity = useRef<HTMLInputElement | null>(null);
   const inputPrice = useRef<HTMLInputElement | null>(null);
-  const [lessonTime, setLessonTime] = useState<LessonTime[]>([]);
+  const [lessonTime, setLessonTime] = useState<LessonDateCommonType[]>([]);
   const [materials, setMaterials] = useState<string>('');
   const inputDetailInfo = useRef<HTMLTextAreaElement | null>(null);
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getCategoryList();
+      return res;
+    },
+    staleTime: 100000,
+  });
+
+  const { mutate: postImage } = useMutation({
+    mutationFn: (formData: FormData) => {
+      const res = ImageApiClient.getImageInstance().postLessonImg(formData);
+      return res;
+    },
+    onSuccess: (data) => {
+      if (
+        category &&
+        inputTitle.current?.value &&
+        inputPrice.current?.value &&
+        inputCapacity.current?.value &&
+        inputDetailInfo.current?.value
+      ) {
+        postCreateLesson({
+          categoryId: category?.categoryId,
+          title: inputTitle.current?.value,
+          location: address,
+          price: +inputPrice.current?.value,
+          capacity: +inputCapacity.current?.value,
+          image: data,
+          description: inputDetailInfo.current?.value,
+          materials: materials,
+          lessonDate: lessonTime,
+        });
+      }
+    },
+  });
+
+  const { mutate: postCreateLesson } = useMutation({
+    mutationFn: (reqData: CreateLessonReqType) => {
+      const res = ApiClient.getInstance().postCreateLesson(reqData);
+      return res;
+    },
+    onSuccess: () => setIsSend(true),
+  });
 
   const onChangeUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
+      setFile(file);
       const imageUrl = URL.createObjectURL(file);
-      setUploadImageFile(imageUrl);
-      // const formData = new FormData();
-      // if (file) {
-      //   formData.append('file', file);
-      //   console.log('formData>>', formData);
-      // }
+      setUploadImageUrl(imageUrl);
     }
   };
 
-  const onChangeCategory = (category: string) => {
+  const onChangeCategory = (category: CategoryType) => {
     setCategory(category);
     setShowModal(false);
   };
 
-  const onChangeLessonTime = (lessontime: LessonTime[]) => {
+  const onChangeLessonTime = (lessontime: LessonDateCommonType[]) => {
+    console.log('aaa>', lessonTime);
     setLessonTime(lessontime);
   };
 
@@ -79,19 +108,19 @@ export const RegisterLesson = () => {
 
   const checkValid = () => {
     if (
-      !uploadImageFile ||
+      !file ||
       inputTitle.current?.value === '' ||
-      category === '' ||
+      !category ||
       inputCapacity.current?.value === '' ||
       inputPrice.current?.value === '' ||
-      lessonTime.length === 0 ||
+      // lessonTime === 0 ||
       address === '' ||
       inputDetailInfo.current?.value === ''
     ) {
       setIsBtnActive(false);
       return;
     }
-    if (inputPrice.current && +inputPrice.current.value <= 0) {
+    if (inputPrice.current && +inputPrice.current.value < 0) {
       setIsBtnActive(false);
       return;
     }
@@ -99,30 +128,24 @@ export const RegisterLesson = () => {
       setIsBtnActive(false);
       return;
     }
-
     setIsBtnActive(true);
   };
 
   const handlePostAddLesson = () => {
-    console.log('사진>>', uploadImageFile);
-    console.log('강좌명>>', inputTitle.current?.value);
-    console.log('카테고리>>', category);
-    console.log('모집인원>>', inputCapacity.current?.value);
-    console.log('가격>>', inputPrice.current?.value);
-    console.log('클래스 일정>>', lessonTime);
-    console.log('장소>>', address);
-    console.log('준비물>>', materials);
-    console.log('상세설명>>', inputDetailInfo.current?.value);
-    setIsSend(true);
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      postImage(formData);
+    }
   };
 
   useEffect(() => {
     checkValid();
-  }, [uploadImageFile, category, lessonTime, materials, address]);
+  }, [file, category, lessonTime, materials, address]);
 
   return (
     <>
-      {showModal && (
+      {categories?.data && showModal && (
         <ModalBottomContainer
           color='#FFFFFF'
           onClose={() => setShowModal(false)}
@@ -131,15 +154,15 @@ export const RegisterLesson = () => {
           <div className='w-full'>
             <hr />
             <div className='max-h-60 overflow-y-auto scrollbar-hide px-6 py-2'>
-              {categories.map((category, idx) => (
-                <div key={idx}>
+              {categories?.data.map((category, idx) => (
+                <div key={category.categoryId}>
                   <p
                     className='py-2 font-hanaRegular text-base cursor-pointer pl-1'
                     onClick={() => onChangeCategory(category)}
                   >
-                    {category}
+                    {category.categoryName}
                   </p>
-                  {idx !== categories.length - 1 && <hr />}
+                  {idx + 1 !== categories.data?.length && <hr />}
                 </div>
               ))}
             </div>
@@ -158,9 +181,9 @@ export const RegisterLesson = () => {
               className='hidden'
             />
             <label htmlFor='imgUploadInput' className='overflow-hidden'>
-              {uploadImageFile ? (
+              {uploadImageUrl ? (
                 <img
-                  src={uploadImageFile}
+                  src={uploadImageUrl}
                   alt='클래스 이미지'
                   className='w-24 h-24 rounded-lg object-fill drop-shadow-[0px_4px_4px_rgba(0,0,0,0.25)]'
                 />
@@ -184,8 +207,10 @@ export const RegisterLesson = () => {
               카테고리
             </h1>
             <ChoiceInput
-              isChoice={category !== ''}
-              content={category !== '' ? category : '카테고리를 선택해주세요'}
+              isChoice={!!category}
+              content={
+                category ? category?.categoryName : '카테고리를 선택해주세요'
+              }
               openModal={() => setShowModal(true)}
             />
           </div>
