@@ -14,8 +14,12 @@ export const PopularLessonItem: FC<IProps> = ({ id, img, title }) => {
       className='w-36 flex flex-col justify-center gap-1 cursor-pointer'
       onClick={() => navigate(`/lesson/${id}`)}
     >
-      <div className='w-36 rounded-xl overflow-hidden'>
-        <img src={img} alt='클래스 사진' className='w-full' />
+      <div className='w-36 h-36 rounded-xl overflow-hidden'>
+        <img
+          src={img}
+          alt='클래스 사진'
+          className='w-full h-full object-cover'
+        />
       </div>
       <p className='font-hanaMedium text-sm overflow-hidden whitespace-nowrap text-ellipsis break-all'>
         {title}

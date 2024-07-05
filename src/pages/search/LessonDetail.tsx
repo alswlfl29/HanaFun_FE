@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Topbar } from '../../components/common/Topbar';
 import { LessonContainer } from '../../components/molecules/LessonContainer';
 import { Button } from '../../components/common/Button';
@@ -13,12 +13,12 @@ import { Loading } from '../Loading';
 
 export const LessonDetail = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { lessonId } = useParams();
   const [shownotice, setShowNotice] = useState<boolean>(false);
   const [copyLocation, setCopyLocation] = useState<boolean>(false);
   const [materials, setMaterials] = useState<string[]>([]);
   const [choiceModal, setChoiceModal] = useState<boolean>(false);
-
   const { isLoading: isGetLessonLoading, data: lesson } = useQuery({
     queryKey: ['lesson', lessonId],
     queryFn: () => {
@@ -76,7 +76,7 @@ export const LessonDetail = () => {
           onClickShowAlarm={(status: boolean) => setCopyLocation(status)}
         />
       )}
-      {lessonDateList?.data && lesson?.data && choiceModal && (
+      {lessonId && lessonDateList?.data && lesson?.data && choiceModal && (
         <ModalBottomContainer
           color='#FFFFFF'
           onClose={() => setChoiceModal(false)}
@@ -85,12 +85,18 @@ export const LessonDetail = () => {
             하나의 일정을 선택해주세요.
           </div>
           <LessonDateChoice
+            lessonId={+lessonId}
             dateList={lessonDateList?.data}
             price={lesson?.data?.price}
           />
         </ModalBottomContainer>
       )}
-      <Topbar title='원데이 클래스' onClick={() => navigate(-1)} />
+      <Topbar
+        title='원데이 클래스'
+        onClick={() => {
+          state && state.prev === 'pay' ? navigate(-3) : navigate(-1);
+        }}
+      />
       <div className='w-full h-64 overflow-hidden object-fill'>
         <img
           src={lesson?.data?.image}
@@ -165,7 +171,13 @@ export const LessonDetail = () => {
       <div className='mt-28'>
         <Button
           message={lessonDateList?.data?.length !== 0 ? '신청하기' : '예약마감'}
-          isActive={lessonDateList?.data?.length !== 0 ? true : false}
+          isActive={
+            lessonDateList?.data?.length !== 0
+              ? !lesson?.data?.hostMe
+                ? true
+                : false
+              : false
+          }
           onClick={() => setChoiceModal(true)}
         />
       </div>

@@ -10,13 +10,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AccountPwKeypad } from '../../components/organisms/AccountPwKeypad';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
 import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { getCookie } from '../../utils/cookie';
 import { Loading } from '../Loading';
 import { useModal } from '../../context/ModalContext';
 
 export const PayLesson = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { state } = useLocation();
   const [account, setAccount] = useState<AccountType | null>(null);
@@ -68,7 +69,10 @@ export const PayLesson = () => {
           openModal(data.data?.message, closeModal);
           if (data.data.message === '계좌 비밀번호가 맞지 않습니다.')
             setShowPwModal(false);
-          else navigate(-1);
+          else
+            navigate(`/lesson/${state.lessonId}`, {
+              state: { prev: 'pay' },
+            });
         }
       }
     },
@@ -81,6 +85,12 @@ export const PayLesson = () => {
     },
     onSuccess: (data) => {
       if (data.isSuccess) {
+        queryClient.invalidateQueries({
+          queryKey: [getCookie('token'), 'accountList'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [getCookie('token'), 'hanamoney'],
+        });
         setIsSend(true);
         setShowModal(false);
         setShowPwModal(false);
@@ -188,7 +198,14 @@ export const PayLesson = () => {
           onClose={() => setShowPwModal(false)}
         />
       )}
-      <Topbar title='결제' onClick={() => navigate(-1)} />
+      <Topbar
+        title='결제'
+        onClick={() =>
+          navigate(`/lesson/${state.lessonId}`, {
+            state: { prev: 'pay' },
+          })
+        }
+      />
       {!isSend ? (
         <>
           {accountList?.data && (
@@ -254,7 +271,9 @@ export const PayLesson = () => {
         message={!isSend ? '다음' : '완료'}
         isActive={!isSend ? activeBtn : true}
         onClick={() => {
-          !isSend ? setShowModal(true) : navigate('/mypage/my-lesson-list');
+          !isSend
+            ? setShowModal(true)
+            : navigate('/mypage/my-lesson-list', { replace: true });
         }}
       />
     </>

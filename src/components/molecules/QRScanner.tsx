@@ -18,7 +18,7 @@ export const QRScanner: FC<IProps> = ({ onClose }) => {
 
   const QrOptions = {
     // 핸드폰의 경우, 외부 카메라인지 셀프카메라인지
-    preferredCamera: 'user',
+    preferredCamera: 'environment',
     // 1초당 몇번의 스캔을 할 것인지? ex) 1초에 5번 QR 코드 감지한다.
     maxScansPerSecond: 5,
     // QR 스캔이 일어나는 부분을 표시해줄 지 (노란색 네모 테두리가 생긴다.)

@@ -23,6 +23,7 @@ import { LessonDetail } from './pages/search/LessonDetail.tsx';
 import { PayLesson } from './pages/search/PayLesson.tsx';
 import { Sales } from './pages/mypage/Sales.tsx';
 import { SalesYear } from './pages/mypage/SalesYear.tsx';
+import { ErrorPage } from './pages/ErrorPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
         ],
       },
     ],
+    errorElement: <ErrorPage />,
   },
 ]);
 

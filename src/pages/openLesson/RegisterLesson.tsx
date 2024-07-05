@@ -92,7 +92,6 @@ export const RegisterLesson = () => {
   };
 
   const onChangeLessonTime = (lessontime: LessonDateCommonType[]) => {
-    console.log('aaa>', lessonTime);
     setLessonTime(lessontime);
   };
 
@@ -248,7 +247,11 @@ export const RegisterLesson = () => {
         message={!isSend ? '등록' : '완료'}
         isActive={isBtnActive}
         onClick={() => {
-          !isSend ? handlePostAddLesson() : navigate('/mypage/host');
+          !isSend
+            ? handlePostAddLesson()
+            : navigate('/mypage/host', {
+                replace: true,
+              });
         }}
       />
     </>

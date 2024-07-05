@@ -75,7 +75,6 @@ export const LessonSearch = () => {
   const handleSearchInput = () => {
     if (inputRef.current) setSearchText(inputRef.current.value);
   };
-
   useEffect(() => {
     if (lessonList?.data && selectedCategory === -1) setItems(lessonList.data);
     if (lessonListByCategory?.data && selectedCategory !== -1)

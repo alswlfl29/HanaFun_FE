@@ -87,7 +87,11 @@ export const RegisterHost = () => {
         isActive={true}
         message={!isSend ? '등록' : '클래스 개설하기'}
         onClick={() =>
-          !isSend ? handleRegisterHost() : navigate('/open-lesson/lesson')
+          !isSend
+            ? handleRegisterHost()
+            : navigate('/open-lesson/lesson', {
+                replace: true,
+              })
         }
       />
     </>

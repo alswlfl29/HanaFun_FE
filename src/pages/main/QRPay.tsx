@@ -7,13 +7,15 @@ import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
 import { InputMoney } from '../../components/Atom/InputMoney';
 import { ChoiceInput } from '../../components/molecules/ChoiceInput';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { ModalBottomContainer } from '../../components/organisms/ModalBottomContainer';
 import { useModal } from '../../context/ModalContext';
 import { Loading } from '../Loading';
+import { getCookie } from '../../utils/cookie';
 
 export const QRPay = () => {
+  const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
@@ -31,7 +33,12 @@ export const QRPay = () => {
       return res;
     },
     onSuccess: (data) => {
-      if (data.isSuccess && data.data?.transactionId) setIsSend(true);
+      if (data.isSuccess && data.data?.transactionId) {
+        queryClient.invalidateQueries({
+          queryKey: [getCookie('token'), 'accountList'],
+        });
+        setIsSend(true);
+      }
     },
   });
 
@@ -102,19 +109,25 @@ export const QRPay = () => {
           <h3 className='font-hanaBold text-lg'>클래스를 선택해주세요.</h3>
           <div className='w-full'>
             <hr />
-            <div className='max-h-60 overflow-y-auto scrollbar-hide px-6 py-2'>
-              {hostInfo.data?.lessonList.map((lesson, idx) => (
-                <div key={idx}>
-                  <p
-                    className='py-2 font-hanaRegular text-base cursor-pointer pl-1'
-                    onClick={() => onChangeLesson(lesson)}
-                  >
-                    {lesson.title}
-                  </p>
-                  {idx + 1 !== hostInfo.data?.lessonList.length && <hr />}
-                </div>
-              ))}
-            </div>
+            {hostInfo.data.lessonList.length !== 0 ? (
+              <div className='max-h-60 overflow-y-auto scrollbar-hide px-6 py-2'>
+                {hostInfo.data?.lessonList.map((lesson, idx) => (
+                  <div key={idx}>
+                    <p
+                      className='py-2 font-hanaRegular text-base cursor-pointer pl-1'
+                      onClick={() => onChangeLesson(lesson)}
+                    >
+                      {lesson.title}
+                    </p>
+                    {idx + 1 !== hostInfo.data?.lessonList.length && <hr />}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className='font-hanaRegular min-h-20 flex justify-center items-center'>
+                클래스가 없습니다.
+              </div>
+            )}
           </div>
         </ModalBottomContainer>
       )}
@@ -156,7 +169,7 @@ export const QRPay = () => {
         message={!isSend ? '결제' : '완료'}
         isActive={!isSend ? isBtnActive : true}
         onClick={() => {
-          !isSend ? handleSendPayment() : navigate('/');
+          !isSend ? handleSendPayment() : navigate('/', { replace: true });
         }}
       />
     </>

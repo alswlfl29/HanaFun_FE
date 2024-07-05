@@ -1,12 +1,14 @@
 import axios, { AxiosInstance } from 'axios';
 import { API_BASE_URL } from './url';
-import { getCookie } from '../utils/cookie';
+import { getCookie, removeCookie } from '../utils/cookie';
 import { userApi } from './interfaces/userApi';
 import { accountApi } from './interfaces/accountApi';
 import { hostApi } from './interfaces/hostApi';
 import { categoryApi } from './interfaces/categoryApi';
 import { transactionApi } from './interfaces/transactionApi';
 import { reservationApi } from './interfaces/reservationApi';
+import { useNavigate } from 'react-router-dom';
+import { useModal } from '../context/ModalContext';
 
 export class ApiClient
   implements
@@ -394,6 +396,19 @@ export class ApiClient
         return Promise.reject(error);
       }
     );
+
+    newInstance.interceptors.response.use((response) => {
+      if (response.status === 403) {
+        removeCookie('token');
+        removeCookie('username');
+        location.href = '/';
+      }
+
+      if (response.status === 404) {
+        location.href = '/error';
+      }
+      return response;
+    });
 
     return newInstance;
   };
