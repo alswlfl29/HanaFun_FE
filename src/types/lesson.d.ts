@@ -24,7 +24,6 @@ interface LessonDetailType {
   materials: string;
   capacity: number;
   categoryName: string;
-  hostMe: boolean;
 }
 
 interface CreateLessonReqType {
