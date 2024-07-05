@@ -4,7 +4,7 @@ import { LineChart } from '../../components/molecules/LineChart';
 import { Calculator } from '../../components/molecules/Calculator';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 export const SalesYear = () => {
   const { year, lesson_id } = useParams<{ year: string; lesson_id: string }>();
@@ -12,7 +12,7 @@ export const SalesYear = () => {
 
   // api 호출
   const { data: lessonRevenue } = useQuery({
-    queryKey: ['monthRevenue'],
+    queryKey: ['monthRevenue', lesson_id],
     queryFn: async () => {
       const response = await ApiClient.getInstance().getLessonRevenue(
         Number(year),

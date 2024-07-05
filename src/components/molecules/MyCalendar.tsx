@@ -8,20 +8,23 @@ interface IProps {
   data: CalendarDataType[] | undefined;
   setSelectedLesson: (lesson: CalendarDataType[]) => void;
   onDateChange: (date: Date) => void;
-  onSelectLessondateId: (lessondateId: number) => void; // 추가된 prop
+  onSelectLessondateId: (lessondateId: number) => void;
+  check: (date: Date) => void;
 }
 
 export const MyCalendar = ({
   data,
   setSelectedLesson,
   onDateChange,
-  onSelectLessondateId, // 추가된 prop
+  onSelectLessondateId,
+  check,
 }: IProps) => {
   const [value, setValue] = useState(new Date());
   const [mark, setMark] = useState<string[]>([]);
 
   const handleDateChange = (date: Date | Date[]) => {
     const selectedDate = Array.isArray(date) ? date[0] : date;
+    check(value);
     setValue(selectedDate);
     onDateChange(selectedDate);
     const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
@@ -41,7 +44,10 @@ export const MyCalendar = ({
     }
   }, [data]);
 
-  const handleOpenList = () => {};
+  const handleOpenList = () => {
+    console.log(value);
+  };
+
   useEffect(() => {
     onDateChange(new Date());
   }, [onDateChange]);
