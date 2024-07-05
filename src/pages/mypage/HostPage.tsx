@@ -18,7 +18,6 @@ export const HostPage = () => {
     queryKey: ['hostLessons'],
     queryFn: async () => {
       const response = await ApiClient.getInstance().getHostLessonList();
-      console.log(hostLessons);
       return response;
     },
   });

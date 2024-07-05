@@ -5,7 +5,6 @@ interface IProps {
 }
 
 export const HostLessonSlider = ({ data }: IProps) => {
-  console.log(data);
   return (
     <div className='h-80 mt-5 pb-2 flex flex-col items-center overflow-y-scroll scrollbar-hide'>
       {data?.map((lesson, idx) => (

@@ -25,8 +25,6 @@ export const LessonSlider = ({ data, show, option }: IProps) => {
         reservationId: reservationId,
       });
 
-      console.log('응답 :', paybackResponse);
-
       if (paybackResponse.isSuccess) {
         const cancelResponse = await ApiClient.getInstance().cancelLesson({
           reservationId: reservationId,
@@ -88,45 +86,51 @@ export const LessonSlider = ({ data, show, option }: IProps) => {
 
   return (
     <div className='mt-5 pb-1 h-40 overflow-x-scroll whitespace-nowrap scrollbar-hide'>
-      {data?.map((myLesson, index) => (
-        <div key={index} className='inline-block relative'>
-          <div className='lesson-card'>
-            <LessonCard
-              image={myLesson.image}
-              title={myLesson.title}
-              category={myLesson.categoryName}
-              date={myLesson.date}
-              show={show}
-              handleClick={() => handleModalOpen(index)}
-            />
-          </div>
-          {activeCard === index && (
-            <div className='absolute top-0 right-0 mr-4 flex justify-center items-center'>
-              {option === 'single' && (
-                <DropdownSingle
-                  image='/images/mypage/dropdown_img.svg'
-                  text='신고하기'
-                  handleClick={() => {
-                    handleReport();
-                  }}
-                />
-              )}
-              {option === 'double' && (
-                <DropdownDouble
-                  image1='/images/mypage/dropdown_trash.svg'
-                  image2='/images/mypage/dropdown_img.svg'
-                  text1='예약취소'
-                  text2='신고하기'
-                  handleClick1={() => {
-                    handleDelete(myLesson.reservationId);
-                  }}
-                  handleClick2={() => handleReport()}
-                />
-              )}
+      {data && data.length > 0 ? (
+        data.map((myLesson, index) => (
+          <div key={index} className='inline-block relative'>
+            <div className='lesson-card'>
+              <LessonCard
+                image={myLesson.image}
+                title={myLesson.title}
+                category={myLesson.categoryName}
+                date={myLesson.date}
+                show={show}
+                handleClick={() => handleModalOpen(index)}
+              />
             </div>
-          )}
-        </div>
-      ))}
+            {activeCard === index && (
+              <div className='absolute top-0 right-0 mr-4 flex justify-center items-center'>
+                {option === 'single' && (
+                  <DropdownSingle
+                    image='/images/mypage/dropdown_img.svg'
+                    text='신고하기'
+                    handleClick={() => {
+                      handleReport();
+                    }}
+                  />
+                )}
+                {option === 'double' && (
+                  <DropdownDouble
+                    image1='/images/mypage/dropdown_trash.svg'
+                    image2='/images/mypage/dropdown_img.svg'
+                    text1='예약취소'
+                    text2='신고하기'
+                    handleClick1={() => {
+                      handleDelete(myLesson.reservationId);
+                    }}
+                    handleClick2={() => handleReport()}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <p className='font-hanaMedium text-hanaSilver text-center mt-10'>
+          일정이 없습니다.
+        </p>
+      )}
     </div>
   );
 };

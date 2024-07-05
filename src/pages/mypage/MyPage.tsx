@@ -8,10 +8,12 @@ import { NotFindMyLesson } from '../../components/molecules/NotFindMyLesson';
 import { Loading } from '../Loading';
 import { ErrorPage } from '../ErrorPage';
 import { getCookie } from '../../utils/cookie';
+import { useModal } from '../../context/ModalContext';
 
 const MyPage = () => {
   const username = getCookie('username');
   const navigate = useNavigate();
+  const { openModal } = useModal();
 
   const handleNavigate = () => {
     navigate('/mypage/my-lesson-list');
@@ -48,6 +50,26 @@ const MyPage = () => {
     },
   });
 
+  // 호스트 여부 판단
+  const { data: isHostData } = useQuery({
+    queryKey: ['isHost', getCookie('token')],
+    queryFn: () => {
+      const res = ApiClient.getInstance().getIsHost();
+      return res;
+    },
+    retry: 1,
+  });
+  const handleHostPage = () => {
+    if (isHostData?.data?.isHost) {
+      navigate('/mypage/host');
+    } else {
+      // 모달 열기
+      openModal('호스트 등록을 먼저 진행해주세요!', () =>
+        navigate('/open-lesson')
+      );
+    }
+  };
+
   if (listLoading || moneyLoading) {
     return <Loading />;
   }
@@ -80,7 +102,7 @@ const MyPage = () => {
         </div>
         <div
           className='w-[164px] h-[156px] bg-white rounded-2xl shadow-md cursor-pointer'
-          onClick={() => navigate('/mypage/host')}
+          onClick={handleHostPage}
         >
           <img
             src='../images/mypage/pencil.png'

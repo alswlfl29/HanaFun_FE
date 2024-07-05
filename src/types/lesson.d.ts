@@ -40,5 +40,6 @@ interface CreateLessonReqType {
 
 interface CalendarDataType {
   lesson_id: number;
+  lessondateId: number;
   date: string;
 }

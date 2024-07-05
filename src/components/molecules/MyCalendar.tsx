@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import 'react-calendar/dist/Calendar.css'; // react-calendar 기본 스타일
+import 'react-calendar/dist/Calendar.css';
 import Calendar from 'react-calendar';
 import '../css/MyCalendar.css';
 import moment from 'moment';
@@ -7,18 +7,31 @@ import moment from 'moment';
 interface IProps {
   data: CalendarDataType[] | undefined;
   setSelectedLesson: (lesson: CalendarDataType[]) => void;
+  onDateChange: (date: Date) => void;
+  onSelectLessondateId: (lessondateId: number) => void; // 추가된 prop
 }
 
-export const MyCalendar = ({ data, setSelectedLesson }: IProps) => {
-  const [value, onChange] = useState(new Date()); // 초깃값 : 현재 날짜
+export const MyCalendar = ({
+  data,
+  setSelectedLesson,
+  onDateChange,
+  onSelectLessondateId, // 추가된 prop
+}: IProps) => {
+  const [value, setValue] = useState(new Date());
   const [mark, setMark] = useState<string[]>([]);
 
-  const handleDateChange = (date: Date) => {
-    onChange(date);
-    const selectedDate = moment(date).format('YYYY-MM-DD');
-    const lessons = data.filter((lesson) => lesson.date === selectedDate);
-    console.log('확인', lessons);
-    setSelectedLesson(lessons);
+  const handleDateChange = (date: Date | Date[]) => {
+    const selectedDate = Array.isArray(date) ? date[0] : date;
+    setValue(selectedDate);
+    onDateChange(selectedDate);
+    const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+    if (data) {
+      const lessons = data.filter((lesson) => lesson.date === formattedDate);
+      if (lessons.length > 0) {
+        onSelectLessondateId(lessons[0].lessondateId); // 선택한 날짜의 lessondateId 전달
+      }
+      setSelectedLesson(lessons);
+    }
   };
 
   useEffect(() => {
@@ -29,6 +42,9 @@ export const MyCalendar = ({ data, setSelectedLesson }: IProps) => {
   }, [data]);
 
   const handleOpenList = () => {};
+  useEffect(() => {
+    onDateChange(new Date());
+  }, [onDateChange]);
 
   return (
     <div className='flex flex-col items-center justify-center font-hanaRegular'>

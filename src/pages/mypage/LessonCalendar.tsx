@@ -18,23 +18,26 @@ export const LessonCalendar = () => {
   const [selectedLesson, setSelectedLesson] = useState<MyScheduleType[]>([]);
   const [selectedLessonId, setSelectedLessonId] = useState<number | null>(null);
   const [calendarData, setCalendarData] = useState<CalendarDataType[]>([]);
+  const [year, setYear] = useState(currYear);
+  const [month, setMonth] = useState(currMonth);
 
   // 나의 신청 클래스 api 호출
+
   const {
     data: mySchedule,
     isLoading: isLoadingLessons,
     error: errorLessons,
   } = useQuery({
-    queryKey: ['mySchedule', currYear, currMonth],
+    queryKey: ['mySchedule', year, month],
     queryFn: async () => {
       const reqData = {
-        year: currYear,
-        month: currMonth,
+        year: year,
+        month: month,
       };
       const response = await ApiClient.getInstance().getMySchedule(reqData);
+      console.log(response.data);
       return response.data;
     },
-    retry: 1,
   });
 
   // lesson 상세 정보 api 호출
@@ -58,11 +61,19 @@ export const LessonCalendar = () => {
     if (mySchedule) {
       const formattedData = mySchedule.map((lesson: MyScheduleType) => ({
         lesson_id: lesson.lessonId,
+        lessondateId: 0,
         date: lesson.date,
       }));
       setCalendarData(formattedData);
     }
   }, [mySchedule]);
+
+  const handleDateChange = (date: Date) => {
+    setYear(date.getFullYear());
+    setMonth(date.getMonth() + 1);
+  };
+
+  const handleSelectLessondateId = (lessondateId: number) => {};
 
   if (isLoadingLessons || isLoadingDetail) {
     return <Loading />;
@@ -85,6 +96,8 @@ export const LessonCalendar = () => {
           );
           setSelectedLesson(selectedLessons || []);
         }}
+        onDateChange={handleDateChange}
+        onSelectLessondateId={handleSelectLessondateId}
       />
       <div className='m-5'>
         <p className='font-hanaMedium text-xl ml-1'>나의 일정 모아보기</p>
