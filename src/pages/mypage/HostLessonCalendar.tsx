@@ -58,7 +58,6 @@ export const HostLessonCalendar = () => {
 
   const handleLessonDetail = async (lessondateId: number) => {
     try {
-      console.log('Fetching applicants for lessondate_id:', lessondateId);
       const response = await ApiClient.getInstance().peopleList({
         lessondateId: lessondateId,
       });

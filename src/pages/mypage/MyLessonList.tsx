@@ -13,7 +13,6 @@ export const MyLessonList = () => {
     queryKey: ['allLessons'],
     queryFn: async () => {
       const response = await ApiClient.getInstance().getMyLessonAll();
-      console.log('신청 클래스 api 호출 : ', response.data);
       return response.data;
     },
     retry: 1,

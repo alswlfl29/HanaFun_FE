@@ -12,7 +12,6 @@ export class ImageApiClient {
 
   // 이미지 업로드
   async postLessonImg(formData: FormData) {
-    console.log('ddddfsdjf>>', formData);
     const response = await this.axiosImgInstance.request<string>({
       method: 'post',
       url: '/lesson/image-upload',
@@ -55,7 +54,6 @@ export class ImageApiClient {
         return config;
       },
       (error) => {
-        console.log(error);
         return Promise.reject(error);
       }
     );

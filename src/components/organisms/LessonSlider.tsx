@@ -29,7 +29,6 @@ export const LessonSlider = ({ data, show, option }: IProps) => {
         const cancelResponse = await ApiClient.getInstance().cancelLesson({
           reservationId: reservationId,
         });
-        console.log('cancleResponse', cancelResponse);
         if (cancelResponse.success) {
           openModal('예약이 취소되었습니다', () =>
             navigate('/mypage/my-lesson-list')

@@ -4,7 +4,6 @@ interface IProps {
 }
 
 export const ApplicantList = ({ applicants }: IProps) => {
-  console.log('신청자list: ', applicants);
   return (
     <div>
       <div className='font-hanaMedium flex justify-between text-lg mt-5 '>

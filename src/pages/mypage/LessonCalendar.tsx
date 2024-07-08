@@ -37,7 +37,6 @@ export const LessonCalendar = () => {
         month: month,
       };
       const response = await ApiClient.getInstance().getMySchedule(reqData);
-      console.log(response.data);
       return response.data;
     },
   });
@@ -82,7 +81,6 @@ export const LessonCalendar = () => {
       setSelectedLessonId(null);
       queryClient.invalidateQueries({ queryKey: ['lessonDetails'] });
     }
-    console.log('dddd>>', selectedLessonDetail);
   }, [check]);
 
   if (isLoadingLessons || isLoadingDetail) {

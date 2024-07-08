@@ -70,7 +70,6 @@ export const Calculator = ({ data, lessonId, year }: IProps) => {
       return response;
     },
     onSuccess: async (response) => {
-      console.log('성공');
       if (response.data) {
         setMaterialPrice(response.data.materialPrice);
         setRentalPrice(response.data.rentalPrice);
@@ -83,9 +82,7 @@ export const Calculator = ({ data, lessonId, year }: IProps) => {
         queryClient.invalidateQueries({ queryKey: ['monthRevenue'] });
       }
     },
-    onError: async () => {
-      console.log('에러');
-    },
+    onError: async () => {},
   });
 
   const saveEditPrice = () => {

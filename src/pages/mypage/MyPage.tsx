@@ -75,7 +75,6 @@ const MyPage = () => {
   }
 
   if (listError || moneyError) {
-    console.log('point error', point);
     return <ErrorPage />;
   }
 

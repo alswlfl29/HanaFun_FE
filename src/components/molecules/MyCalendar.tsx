@@ -44,9 +44,7 @@ export const MyCalendar = ({
     }
   }, [data]);
 
-  const handleOpenList = () => {
-    console.log(value);
-  };
+  const handleOpenList = () => {};
 
   useEffect(() => {
     onDateChange(new Date());
