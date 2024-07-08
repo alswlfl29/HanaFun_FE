@@ -9,7 +9,7 @@ export const ApplicantList = ({ applicants }: IProps) => {
       <div className='font-hanaMedium flex justify-between text-lg mt-5 '>
         <p className='ml-1'>예약자 정보</p>
         <p>
-          {applicants?.people.length}/{applicants?.capacity} 명
+          {applicants?.applicant}/{applicants?.capacity} 명
         </p>
       </div>
 

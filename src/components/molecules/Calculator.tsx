@@ -42,7 +42,7 @@ export const Calculator = ({ data, lessonId, year }: IProps) => {
   };
 
   const handleNextMonth = () => {
-    if (month < currentMonth) {
+    if (month < 12) {
       setMonth((prevMonth) => prevMonth + 1);
     }
   };
@@ -93,12 +93,12 @@ export const Calculator = ({ data, lessonId, year }: IProps) => {
     <div className='w-[351px] h-[338px] p-6 bg-white font-hanaMedium rounded-xl border-[1px] border-hanaSilver'>
       <div className='flex flex-row justify-center items-center'>
         <GrFormPrevious
-          className='mt-1 mr-24 cursor-pointer'
+          className='mt-1 mr-[90px] cursor-pointer'
           onClick={handlePreviousMonth}
         />
         <p>{month}월 매출액</p>
         <GrFormNext
-          className='mt-1 ml-24 cursor-pointer'
+          className='mt-1 ml-[90px] cursor-pointer'
           onClick={handleNextMonth}
         />
       </div>

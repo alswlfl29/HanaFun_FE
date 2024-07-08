@@ -98,6 +98,7 @@ export const HostLessonCalendar = () => {
         }}
         onDateChange={handleDateChange}
         onSelectLessondateId={handleSelectLessondateId}
+        check={() => {}}
       />
       <div className='m-5'>
         <ApplicantList applicants={applicants} />
