@@ -54,6 +54,7 @@ interface PeopleType {
   startTime: string;
   userName: string;
   email: string;
+  applicant: number;
 }
 
 interface PeopleListType extends PeopleType {
