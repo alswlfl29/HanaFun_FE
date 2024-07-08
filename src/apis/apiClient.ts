@@ -7,8 +7,6 @@ import { hostApi } from './interfaces/hostApi';
 import { categoryApi } from './interfaces/categoryApi';
 import { transactionApi } from './interfaces/transactionApi';
 import { reservationApi } from './interfaces/reservationApi';
-import { useNavigate } from 'react-router-dom';
-import { useModal } from '../context/ModalContext';
 
 export class ApiClient
   implements
@@ -397,18 +395,23 @@ export class ApiClient
       }
     );
 
-    newInstance.interceptors.response.use((response) => {
-      if (response.status === 403) {
-        removeCookie('token');
-        removeCookie('username');
-        location.href = '/';
-      }
+    newInstance.interceptors.response.use(
+      (response) => {
+        console.log('dd', response);
+        return response;
+      },
+      (error) => {
+        console.log(error.response.status);
+        if (error.response.status === 403) {
+          alert('로그아웃되었습니다.');
+          removeCookie('token');
+          removeCookie('username');
+          location.href = '/hana';
+        }
 
-      if (response.status === 404) {
-        location.href = '/error';
+        return Promise.reject(error);
       }
-      return response;
-    });
+    );
 
     return newInstance;
   };

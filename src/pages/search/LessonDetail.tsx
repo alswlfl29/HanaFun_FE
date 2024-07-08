@@ -10,6 +10,7 @@ import { LessonDateChoice } from '../../components/molecules/LessonDateChoice';
 import { useQuery } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { Loading } from '../Loading';
+import { ErrorPage } from '../ErrorPage';
 
 export const LessonDetail = () => {
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ export const LessonDetail = () => {
   const [copyLocation, setCopyLocation] = useState<boolean>(false);
   const [materials, setMaterials] = useState<string[]>([]);
   const [choiceModal, setChoiceModal] = useState<boolean>(false);
-  const { isLoading: isGetLessonLoading, data: lesson } = useQuery({
+  const {
+    isLoading: isGetLessonLoading,
+    data: lesson,
+    isError: isGetLessonError,
+  } = useQuery({
     queryKey: ['lesson', lessonId],
     queryFn: () => {
       if (lessonId) {
@@ -66,6 +71,8 @@ export const LessonDetail = () => {
   }, [lesson]);
 
   if (isGetLessonLoading || isGetLessonDateLoading) return <Loading />;
+
+  if (isGetLessonError) return <ErrorPage />;
 
   return (
     <>
@@ -171,7 +178,13 @@ export const LessonDetail = () => {
       <div className='mt-28'>
         <Button
           message={lessonDateList?.data?.length !== 0 ? '신청하기' : '예약마감'}
-          isActive={lessonDateList?.data?.length !== 0 ? true : false}
+          isActive={
+            lessonDateList?.data?.length !== 0
+              ? !lesson?.data?.hostMe
+                ? true
+                : false
+              : false
+          }
           onClick={() => setChoiceModal(true)}
         />
       </div>

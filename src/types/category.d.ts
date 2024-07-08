@@ -9,6 +9,7 @@ interface SearchLessonResType {
   title: string;
   price: number;
   hostName: string;
+  applicantSum: number;
 }
 
 interface CategoryType {

@@ -48,7 +48,7 @@ export const InputMoney: FC<IProps> = ({
           defaultValue={isChangeMoney ? 0 : maxMoney.toLocaleString()}
           disabled={!isChangeMoney}
           onChange={handleChangeMoney}
-          className='border-none bg-transparent text-end pr-2 focus:outline-none'
+          className='border-none bg-transparent text-end pr-2 focus:outline-none disabled:text-black'
           style={{ width: width + 'rem' }}
         />
         원

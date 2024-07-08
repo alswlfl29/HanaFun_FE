@@ -126,9 +126,9 @@ export const HanaFunMain = () => {
 
   if (isGetAccountListError || isGetPopularLessonError) return <ErrorPage />;
 
+  if (isScan) return <QRScanner onClose={() => setIsScan(false)} />;
   return (
     <>
-      {isScan && <QRScanner onClose={() => setIsScan(false)} />}
       {showKeypad && (
         <AccountPwKeypad
           handleClickedPassword={(pw: string) => sendAccountPassword(pw)}

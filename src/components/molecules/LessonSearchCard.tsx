@@ -25,12 +25,18 @@ export const LessonSearchCard: FC<IProps> = ({ lesson }) => {
             {lesson.price.toLocaleString()}원
           </p>
         </div>
+
         <div className='w-full'>
           <hr className='border-hanaSilver mb-2' />
-          <p className='flex items-center gap-1 font-hanaRegular text-sm'>
-            <img src='/images/logo.svg' alt='logo' className='w-7' />
-            {lesson.hostName}
-          </p>
+          <div className='flex justify-between'>
+            <p className='flex items-center gap-1 font-hanaRegular text-sm'>
+              <img src='/images/logo.svg' alt='logo' className='w-7' />
+              {lesson.hostName}
+            </p>
+            <p className='flex items-center font-hanaLight text-xs text-black/70'>
+              참여자 {lesson.applicantSum}
+            </p>
+          </div>
         </div>
       </div>
     </div>

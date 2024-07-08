@@ -10,13 +10,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { AccountPwKeypad } from '../../components/organisms/AccountPwKeypad';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
 import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { getCookie } from '../../utils/cookie';
 import { Loading } from '../Loading';
 import { useModal } from '../../context/ModalContext';
 
 export const PayLesson = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { state } = useLocation();
   const [account, setAccount] = useState<AccountType | null>(null);
@@ -84,6 +85,12 @@ export const PayLesson = () => {
     },
     onSuccess: (data) => {
       if (data.isSuccess) {
+        queryClient.invalidateQueries({
+          queryKey: [getCookie('token'), 'accountList'],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [getCookie('token'), 'hanamoney'],
+        });
         setIsSend(true);
         setShowModal(false);
         setShowPwModal(false);

@@ -124,7 +124,6 @@ export const AddLessonTimeList: FC<IProps> = ({ onChangeTimes }) => {
               <p className='w-full flex items-center justify-between gap-2'>
                 <input
                   type='date'
-                  placeholder='클래스 날짜'
                   min={format(
                     new Date(new Date().setDate(new Date().getDate())),
                     'yyyy-MM-dd'

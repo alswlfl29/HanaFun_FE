@@ -7,13 +7,15 @@ import { ChoiceAccount } from '../../components/organisms/ChoiceAccount';
 import { InputMoney } from '../../components/Atom/InputMoney';
 import { ChoiceInput } from '../../components/molecules/ChoiceInput';
 import { CompleteSend } from '../../components/organisms/CompleteSend';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiClient } from '../../apis/apiClient';
 import { ModalBottomContainer } from '../../components/organisms/ModalBottomContainer';
 import { useModal } from '../../context/ModalContext';
 import { Loading } from '../Loading';
+import { getCookie } from '../../utils/cookie';
 
 export const QRPay = () => {
+  const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
@@ -31,7 +33,12 @@ export const QRPay = () => {
       return res;
     },
     onSuccess: (data) => {
-      if (data.isSuccess && data.data?.transactionId) setIsSend(true);
+      if (data.isSuccess && data.data?.transactionId) {
+        queryClient.invalidateQueries({
+          queryKey: [getCookie('token'), 'accountList'],
+        });
+        setIsSend(true);
+      }
     },
   });
 

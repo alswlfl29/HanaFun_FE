@@ -5,7 +5,7 @@ export type SortType = {
 
 export const SortCategories: SortType[] = [
   {
-    name: '날짜순',
+    name: '등록순',
     sort: 'date',
   },
   {

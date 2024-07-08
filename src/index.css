@@ -46,3 +46,15 @@
 .custom-slider2 .slick-slide > div {
   padding: 0 20px;
 }
+
+input[type='date'],
+input[type='time'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+  background-color: white;
+  min-height: 16px;
+  height: 32px;
+  padding: 8px;
+}
