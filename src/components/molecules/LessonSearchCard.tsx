@@ -18,7 +18,7 @@ export const LessonSearchCard: FC<IProps> = ({ lesson }) => {
       </div>
       <div className='w-44 flex flex-col justify-between px-2'>
         <div>
-          <h1 className='w-full font-hanaRegular text-base mb-1 break-all'>
+          <h1 className='w-full font-hanaRegular text-base mb-1 break-all text-ellipsis line-clamp-2'>
             {lesson.title}
           </h1>
           <p className='font-hanaBold text-sm'>
