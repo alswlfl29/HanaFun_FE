@@ -23,6 +23,7 @@ export const ChoiceAccount: FC<IProps> = ({
 
   const handleChangedAccount = (account: AccountType) => {
     setSelectedAccountInfo(account);
+    if (selectedAccount) selectedAccount(account);
     setShowModal(false);
   };
 
