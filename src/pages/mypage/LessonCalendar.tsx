@@ -99,7 +99,7 @@ export const LessonCalendar = () => {
         setSelectedLesson={(lessons: CalendarDataType[]) => {
           const selectedLessons = mySchedule?.filter((lesson: MyScheduleType) =>
             lessons.some(
-              (selectedLesson) => selectedLesson.lesson_id === lesson.lessonId
+              (selectedLesson) => selectedLesson.date === lesson.date
             )
           );
           setSelectedLesson(selectedLessons || []);
